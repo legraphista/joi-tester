@@ -1,0 +1,80 @@
+@import '../../node_modules/codemirror/lib/codemirror.css';
+@import '../../node_modules/codemirror/theme/cobalt.css';
+
+$back-color: #001a2f;
+$padding: 6px;
+
+$upper-height: 60%;
+$lower-height: calc(40% - 25px);
+
+$normal-color: #ececec;
+$error-color: #e20000;
+$editor-error-color: #7d0101;
+$valid-color: #00e211;
+
+body {
+  margin: 0;
+}
+
+.split {
+  column-count: 2;
+  display: flex;
+  & > div {
+    flex-flow: column;
+    width: 50%;
+    height: 100%;
+    padding: $padding;
+
+    & > .CodeMirror {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+}
+
+.work-area {
+  font-family: 'Source Code Pro', monospace;
+  color: $normal-color;
+
+  margin: 0;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background: $back-color;
+
+  & > .upper {
+    height: $upper-height;
+  }
+
+  & > .lower {
+    padding: $padding;
+    padding-top: 12px;
+    height: $lower-height;
+
+    & > .status {
+      font-size: 18px;
+
+      &.valid::before {
+        content: '✓ Object is valid';
+      }
+      &.error::before {
+        content: '✕ ';
+      }
+    }
+  }
+}
+
+.valid {
+  color: $valid-color
+}
+
+.error {
+  color: $error-color;
+}
+
+.error-code {
+  background: $editor-error-color;
+}

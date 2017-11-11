@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Joi Tester</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../lib/main.css">
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jshint/r07/jshint.js"></script>
+    <script src="https://rawgithub.com/zaach/jsonlint/79b553fb65c192add9066da64043458981b3972b/lib/jsonlint.js"></script>
+
+</head>
+<body>
+
+<div class="work-area">
+    <div class="upper split">
+
+        <div class="code-area">
+        <textarea id="joi">
+//https://github.com/hapijs/joi
+//Insert here your Joi schema
+Joi.object().keys({
+  username: Joi.string().alphanum().min(3).max(30).required(),
+  password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+  access_token: [Joi.string(), Joi.number()],
+  birthyear: Joi.number().integer().min(1900).max(2013),
+  email: Joi.string().email(),
+  ana: joi.object({x: joi.number()})
+}).with('username', 'birthyear').without('password', 'access_token')
+
+        </textarea>
+        </div>
+
+        <div class="code-area">
+        <textarea id="json">
+//Insert here the object to validate
+{
+    username: 'abc',
+    birthyear: 1991, ana: {b: 1}
+}
+        </textarea>
+        </div>
+
+    </div>
+    <div class="lower split">
+        <div class="status valid">
+
+        </div>
+        <div class="output code-area">
+            <textarea id="output">output</textarea>
+        </div>
+    </div>
+</div>
+
+
+<script src="../lib/main.js"></script>
+
+</body>
+</html>

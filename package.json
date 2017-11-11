@@ -1,0 +1,34 @@
+{
+  "name": "joi-tester",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "./node_modules/webpack/bin/webpack.js --progress",
+    "watch": "npm run build -- --watch",
+    "prod": "npm run build -- -p"
+  },
+  "author": "Stefan-Gabriel Muscalu <stefan.gabriel.muscalu@gmail.com> (http://my.corneroftheinternet.rocks/)",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.31",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.31",
+    "@babel/preset-env": "^7.0.0-beta.31",
+    "@babel/runtime": "^7.0.0-beta.31",
+    "babel-loader": "^8.0.0-beta.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.5",
+    "html-loader": "^0.5.1",
+    "node-sass": "^4.6.0",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.19.0",
+    "webpack": "^3.8.1"
+  },
+  "dependencies": {
+    "codemirror": "^5.31.0",
+    "joi": "^13.0.1",
+    "joi-browser": "^13.0.1"
+  }
+}

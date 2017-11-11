@@ -3,7 +3,7 @@
  (test:File)<-[:MADE {on: 11/11/2017}]-(Stefan:Coder)
  */
 const Joi = require('joi');
-const joi = require('joi');
+const joi = Joi;
 
 module.exports = (schemaText, jsonText) => {
 

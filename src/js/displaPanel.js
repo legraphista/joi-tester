@@ -25,26 +25,25 @@ const findLineCharFromIndex = (string, index) => {
   return { line, ch };
 };
 const walkCodeAndGetStartEnd = (code, path) => {
-  console.clear();
   let find = code;
   let codeIndex = 0;
 
-  path.forEach(p => {
+  path.forEach((p, pathIndex) => {
 
-    console.log(find);
-    const reg = (new RegExp(`\{?("|')?${p}("|')?\s*?\:[\u0000-\uffff]*?(\\{|,|'|"|t|f|n|u|\\d)`, 'g')).exec(find);
+    const reg = (new RegExp(`\{?("|')?${p}("|')?\\s*?\:[\\u0000-\\uffff]*?(\\{|\\[|'|"|t|f|n|u|\\d)`, 'g')).exec(find);
+    let index = Math.max(0, reg.index - 1) + codeIndex;
 
-    let index = reg.index - 1;
-    codeIndex += index;
-
-    find = find.substr(index);
-
+    find = code.substr(index);
+    let blockStart = find.indexOf(reg[ 3 ]);
     const start = index;
+    index += Math.max(0, blockStart - 1);
+
     let deep = 0;
     let lastMeaningfulIndex = index;
 
     while (deep >= 0 && index < code.length) {
-       const c = code.charAt(index);
+      const c = code.charAt(index);
+      index++;
 
       if (deep === 0 && c === ',') {
         break;
@@ -57,17 +56,21 @@ const walkCodeAndGetStartEnd = (code, path) => {
         deep--;
       }
 
-      index++;
-      if (!~[ ' ', '\n', '\t', '{', '}', '[', ']' ].indexOf(c) && deep >= 0) {
+      if (!~[ ' ', '\n', '\t' ].indexOf(c) && deep >= 0) {
         lastMeaningfulIndex = index;
       }
     }
-    index --;
-    if (!~[ ' ', '\n', '\t', '{', '}', '[', ']' ].indexOf(code.charAt(index)) && deep >= 0) {
+    index--;
+    if (!~[ ' ', '\n', '\t' ].indexOf(code.charAt(index)) && deep >= 0) {
       lastMeaningfulIndex = index;
     }
 
-    find = find.substr(0, lastMeaningfulIndex - start);
+    // if it's the last path, take the full code
+    if (pathIndex === path.length - 1) {
+      blockStart = 1;
+    }
+    find = find.substr(blockStart, lastMeaningfulIndex - start - blockStart + 1);
+    codeIndex = start + blockStart - 1;
   });
 
   codeIndex++;
@@ -96,9 +99,12 @@ display.writeError = (code, { error, value, parseErrorSchema, parseErrorJson }) 
       error.details.forEach(({ path, type, message, context }) => {
 
         const { start, end } = walkCodeAndGetStartEnd(code, path);
-        console.log('marking from', start, 'to, end', end);
 
-        const textMarker = jsonEditor.markText(start, end, { className: 'error-code' });
+        const textMarker = jsonEditor.markText(start, end, {
+          className: 'error-code',
+          inclusiveRight: true,
+          inclusiveLeft: true
+        });
         jsonEditorMarkers.push(textMarker);
       })
 

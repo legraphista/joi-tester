@@ -29,9 +29,9 @@ const runTest = () => {
 
     if (value) {
       outputEditor.setValue(JSON.stringify(value, null, 2));
+    }else{
+      outputEditor.setValue('');
     }
-
-    console.dir(error);
   } catch (err) {
     console.error(err);
   }

@@ -1,15 +1,16 @@
 @import url('../../node_modules/codemirror/lib/codemirror.css');
 @import url('../../node_modules/codemirror/theme/cobalt.css');
 
-$back-color: #001a2f;
-$padding: 6px;
+$back-color: #242424;
+$back-light-color: #1f1f1f;
+$padding: 0;
 
 $upper-height: 60%;
-$lower-height: calc(40% - 25px);
+$lower-height: calc(40% - 2px);
 
 $normal-color: #ececec;
 $error-color: #e20000;
-$editor-error-color: rgba(255, 42, 0, 0.8);
+$editor-error-color: rgba(153, 27, 0, 0.8);
 $valid-color: #00e211;
 
 body {
@@ -56,11 +57,14 @@ textarea {
 
   & > .lower {
     padding: $padding;
-    padding-top: 12px;
+    border-top: solid 2px $back-light-color;
     height: $lower-height;
 
     & > .status {
+      box-sizing: border-box;
       font-size: 18px;
+      padding: 16px;
+      text-align: justify;
 
       &.valid::before {
         content: '✓ Object is valid';
@@ -142,4 +146,11 @@ textarea {
   50% {
     background: rgba(255, 0, 0, 0.8);
   }
+}
+
+.CodeMirror-gutter {
+  background: $back-light-color;
+}
+.cm-s-cobalt.CodeMirror {
+  background: $back-color;
 }

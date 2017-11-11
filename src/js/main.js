@@ -18,20 +18,13 @@ editors[ 'json' ].on('change', (e) => {
   runTest();
 });
 
-const outputEditor = editors[ 'output' ];
-
 const runTest = () => {
   try {
     const data = tester(schemaText, jsonText);
 
     display.writeError(jsonText, data);
-    const { error, value, parseErrorSchema, parseErrorJson } = data;
+    display.writeValue(data.value);
 
-    if (value) {
-      outputEditor.setValue(JSON.stringify(value, null, 2));
-    }else{
-      outputEditor.setValue('');
-    }
   } catch (err) {
     console.error(err);
   }

@@ -4,11 +4,11 @@
  */
 const editors = require('./editors');
 const display = module.exports = {};
-
+const stringify = require("json-stringify-pretty-compact");
 const statusDom = document.getElementsByClassName('status')[ 0 ];
 const jsonEditorMarkers = [];
 const jsonEditorDomWidgets = [];
-const { json: jsonEditor } = editors;
+const { json: jsonEditor, output: outputEditor } = editors;
 
 const findLineCharFromIndex = (string, index) => {
   let line = 0;
@@ -131,4 +131,12 @@ display.writeError = (code, { error, value, parseErrorSchema, parseErrorJson }) 
     statusDom.classList.remove('error');
   }
 
+};
+
+display.writeValue = (value) => {
+  if (value) {
+    outputEditor.setValue(stringify(value, null, { maxLength: 80, indent: 2 }));
+  } else {
+    outputEditor.setValue('');
+  }
 };

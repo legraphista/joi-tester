@@ -1,11 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-
+const postcssImport = require('postcss-import');
 const extractSass = new ExtractTextPlugin({
-  filename: "[name].[contenthash].css",
-  disable: process.env.NODE_ENV === "development"
+  filename: "[name].css"
 });
+
+const isProd = process.env.PROD = 1 || process.argv.some(x => /^(--)?p(rod(uction)?)?$/);
+isProd && console.log('Compiling for production');
 
 module.exports = {
   entry: [
@@ -19,10 +21,10 @@ module.exports = {
   },
 
   target: 'web',
-  devtool: 'eval-source-map',
+  devtool: isProd ? undefined : 'source-map',
 
   plugins: [
-    new ExtractTextPlugin("[name].css")
+    extractSass
   ],
   module: {
     rules: [
@@ -58,13 +60,29 @@ module.exports = {
       {
         test: /\.scss$/,
         loader: extractSass.extract({
-          use: [{
-            loader: "css-loader"
-          }, {
-            loader: "sass-loader"
-          }],
-          // use style-loader in development
-          fallback: "style-loader"
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 2,
+                sourceMap: !isProd
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: loader => [
+                  postcssImport({ addDependencyTo: webpack }),
+                  require('postcss-import')({ root: loader.resourcePath }),
+                  require('autoprefixer')({ browsers: [ 'last 2 versions' ] }),
+                  require('cssnano')()
+                ],
+                sourceMap: !isProd
+              }
+            },
+            { loader: 'sass-loader', options: { sourceMap: !isProd } }
+          ]
         })
       }
     ]

@@ -120,7 +120,7 @@ display.writeError = (code, { error, value, parseErrorSchema, parseErrorJson }) 
 <span>Type</span>: ${type}
 <span>Path</span>: ${path.join('.')}
 <span>Message</span>: ${message}
-<span>Context</span>: ${JSON.stringify(context)}\
+<span>Context</span>: ${JSON.stringify(context, null, 2)}\
 `;
         jsonEditor.addWidget(start, domWidget);
       })

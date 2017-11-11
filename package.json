@@ -29,6 +29,7 @@
   "dependencies": {
     "codemirror": "^5.31.0",
     "joi": "^13.0.1",
-    "joi-browser": "^13.0.1"
+    "joi-browser": "^13.0.1",
+    "prettyprint": "^1.1.1"
   }
 }

@@ -7,6 +7,7 @@ const display = module.exports = {};
 
 const statusDom = document.getElementsByClassName('status')[ 0 ];
 const jsonEditorMarkers = [];
+const jsonEditorDomWidgets = [];
 const { json: jsonEditor } = editors;
 
 const findLineCharFromIndex = (string, index) => {
@@ -83,16 +84,20 @@ const walkCodeAndGetStartEnd = (code, path) => {
 
 display.writeError = (code, { error, value, parseErrorSchema, parseErrorJson }) => {
 
+  while (jsonEditorMarkers.length) {
+    jsonEditorMarkers.pop().clear();
+  }
+  while (jsonEditorDomWidgets.length) {
+    const w = jsonEditorDomWidgets.pop();
+    w.parentElement && w.parentElement.removeChild(w);
+  }
+
   statusDom.innerText = '';
   if (error || parseErrorJson || parseErrorSchema) {
     statusDom.innerText = (error || parseErrorJson || parseErrorSchema).toString();
 
     statusDom.classList.remove('valid');
     statusDom.classList.add('error');
-
-    while (jsonEditorMarkers.length) {
-      jsonEditorMarkers.pop().clear();
-    }
 
     if (error) {
 
@@ -106,6 +111,18 @@ display.writeError = (code, { error, value, parseErrorSchema, parseErrorJson }) 
           inclusiveLeft: true
         });
         jsonEditorMarkers.push(textMarker);
+
+        const domWidget = document.createElement('div');
+        domWidget.classList.add('code-widget');
+        jsonEditorDomWidgets.push(domWidget);
+
+        domWidget.innerHTML = `\
+<span>Type</span>: ${type}
+<span>Path</span>: ${path.join('.')}
+<span>Message</span>: ${message}
+<span>Context</span>: ${JSON.stringify(context)}\
+`;
+        jsonEditor.addWidget(start, domWidget);
       })
 
     }

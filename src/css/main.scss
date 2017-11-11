@@ -35,6 +35,7 @@ body {
 
 .work-area {
   font-family: 'Source Code Pro', monospace;
+  //font-size: 16px;
   color: $normal-color;
 
   margin: 0;
@@ -77,4 +78,61 @@ body {
 
 .error-code {
   background: $editor-error-color;
+}
+
+.code-widget {
+  animation: breath 2s;
+  animation-iteration-count: infinite;
+
+  transition: all 0.5s ease;
+  z-index: 10;
+
+  background: rgba(255, 0, 0, 0.8);
+
+  width: 16px;
+  height: 16px;
+  min-height: 16px;
+  min-width: 16px;
+  max-width: 500px;
+
+  transform: translate(-50%, -50%);
+  font-size: 0;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0);
+
+  white-space: pre;
+
+  & > span {
+    color: $valid-color
+  }
+
+  &:hover {
+    animation: none;
+
+    z-index: 11;
+
+    border-radius: 5px;
+    background: rgba(20, 0, 10, 0.65);
+
+    width: auto;
+    height: auto;
+
+    transform: translate(-16px, -16px);
+    font-size: inherit;
+    padding: 24px;
+
+    color: $normal-color;
+  }
+}
+
+@keyframes breath {
+  0% {
+    background: rgba(255, 0, 0, 0.8);
+  }
+  25% {
+    background: rgb(130, 0, 0);
+  }
+  50% {
+    background: rgba(255, 0, 0, 0.8);
+  }
 }

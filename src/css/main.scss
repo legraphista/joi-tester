@@ -17,7 +17,7 @@ body {
 }
 
 textarea {
-  display: none;
+  opacity: 0;
 }
 
 .split {
@@ -39,7 +39,7 @@ textarea {
 
 .work-area {
   font-family: 'Source Code Pro', monospace;
-  //font-size: 16px;
+  font-size: 16px;
   color: $normal-color;
 
   margin: 0;

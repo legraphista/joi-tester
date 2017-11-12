@@ -2,17 +2,27 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const postcssImport = require('postcss-import');
+
 const extractSass = new ExtractTextPlugin({
   filename: "[name].css"
+});
+const extractGithubCss = new ExtractTextPlugin({
+  filename: "gh.css"
 });
 
 const isProd = process.env.PROD = 1 || process.argv.some(x => /^(--)?p(rod(uction)?)?$/);
 isProd && console.log('Compiling for production');
 
+if(isProd){
+  console.log('Convertind docs')
+  require('child_process').execSync('node convert-docs.js');
+}
+
 module.exports = {
   entry: [
     './src/js/main.js',
-    './src/css/main.scss'
+    './src/css/main.scss',
+    './src/css/github-markdown.css'
   ],
 
   output: {
@@ -24,7 +34,8 @@ module.exports = {
   devtool: isProd ? undefined : 'source-map',
 
   plugins: [
-    extractSass
+    extractSass,
+    extractGithubCss
   ],
   module: {
     rules: [
@@ -56,6 +67,16 @@ module.exports = {
         exclude: [
           path.resolve(__dirname, 'node_modules')
         ]
+      },
+      {
+        test: /github-markdown\.css$/,
+        loaders: extractGithubCss.extract({
+          use: [
+            {
+              loader: "css-loader",
+            }
+          ]
+        })
       },
       {
         test: /\.scss$/,

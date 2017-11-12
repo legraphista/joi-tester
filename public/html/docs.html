@@ -1,0 +1,1531 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Docs</title>
+    <style>
+      .markdown-body {
+        box-sizing: border-box;
+        min-width: 200px;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 45px;
+      }
+    
+      @media (max-width: 767px) {
+        .markdown-body {
+          padding: 15px;
+        }
+      }
+    </style>
+    <link rel="stylesheet" type="text/css" href="../../lib/gh.css">
+</head>
+<body>
+    <article class="markdown-body">
+        <!-- version -->
+<h1 id="1301-api-reference">13.0.1 API Reference</h1>
+<!-- versionstop -->
+<p><img src="https://raw.github.com/hapijs/joi/master/images/validation.png" align="right" /></p>
+<!-- toc -->
+<ul>
+<li><a href="#joi">Joi</a><ul>
+<li><a href="#version"><code>version</code></a></li>
+<li><a href="#validatevalue-schema-options-callback"><code>validate(value, schema, [options], [callback])</code></a></li>
+<li><a href="#compileschema"><code>compile(schema)</code></a></li>
+<li><a href="#assertvalue-schema-message"><code>assert(value, schema, [message])</code></a></li>
+<li><a href="#attemptvalue-schema-message"><code>attempt(value, schema, [message])</code></a></li>
+<li><a href="#refkey-options"><code>ref(key, [options])</code></a></li>
+<li><a href="#isrefref"><code>isRef(ref)</code></a></li>
+<li><a href="#reachschema-path"><code>reach(schema, path)</code></a></li>
+<li><a href="#defaultsfn"><code>defaults(fn)</code></a></li>
+<li><a href="#extendextension"><code>extend(extension)</code></a></li>
+<li><a href="#terms">Terms</a></li>
+<li><a href="#extension">Extension</a></li>
+<li><a href="#npm-note">npm note</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#any"><code>any</code></a></li>
+<li><a href="#schematype"><code>schemaType</code></a></li>
+<li><a href="#anyvalidatevalue-options-callback"><code>any.validate(value, [options], [callback])</code></a></li>
+<li><a href="#anyallowvalue"><code>any.allow(value)</code></a></li>
+<li><a href="#anyvalidvalue---aliases-only-equal"><code>any.valid(value)</code> - aliases: <code>only</code>, <code>equal</code></a></li>
+<li><a href="#anyinvalidvalue---aliases-disallow-not"><code>any.invalid(value)</code> - aliases: <code>disallow</code>, <code>not</code></a></li>
+<li><a href="#anyrequired---aliases-exist"><code>any.required()</code> - aliases: <code>exist</code></a></li>
+<li><a href="#anyoptional"><code>any.optional()</code></a></li>
+<li><a href="#anyforbidden"><code>any.forbidden()</code></a></li>
+<li><a href="#anystrip"><code>any.strip()</code></a></li>
+<li><a href="#anydescriptiondesc"><code>any.description(desc)</code></a></li>
+<li><a href="#anynotesnotes"><code>any.notes(notes)</code></a></li>
+<li><a href="#anytagstags"><code>any.tags(tags)</code></a></li>
+<li><a href="#anymetameta"><code>any.meta(meta)</code></a></li>
+<li><a href="#anyexamplevalue"><code>any.example(value)</code></a></li>
+<li><a href="#anyunitname"><code>any.unit(name)</code></a></li>
+<li><a href="#anyoptionsoptions"><code>any.options(options)</code></a></li>
+<li><a href="#anystrictisstrict"><code>any.strict(isStrict)</code></a></li>
+<li><a href="#anydefaultvalue-description"><code>any.default([value, [description]])</code></a></li>
+<li><a href="#anyconcatschema"><code>any.concat(schema)</code></a></li>
+<li><a href="#anywhencondition-options"><code>any.when(condition, options)</code></a></li>
+<li><a href="#anylabelname"><code>any.label(name)</code></a></li>
+<li><a href="#anyrawisraw"><code>any.raw(isRaw)</code></a></li>
+<li><a href="#anyemptyschema"><code>any.empty(schema)</code></a></li>
+<li><a href="#anyerrorerr"><code>any.error(err)</code></a></li>
+<li><a href="#array---inherits-from-any"><code>array</code> - inherits from <code>Any</code></a></li>
+<li><a href="#arraysparseenabled"><code>array.sparse([enabled])</code></a></li>
+<li><a href="#arraysingleenabled"><code>array.single([enabled])</code></a></li>
+<li><a href="#arrayitemstype"><code>array.items(type)</code></a></li>
+<li><a href="#arrayorderedtype"><code>array.ordered(type)</code></a></li>
+<li><a href="#arrayminlimit"><code>array.min(limit)</code></a></li>
+<li><a href="#arraymaxlimit"><code>array.max(limit)</code></a></li>
+<li><a href="#arraylengthlimit"><code>array.length(limit)</code></a></li>
+<li><a href="#arrayuniquecomparator"><code>array.unique([comparator])</code></a></li>
+<li><a href="#boolean---inherits-from-any"><code>boolean</code> - inherits from <code>Any</code></a></li>
+<li><a href="#booleantruthyvalue"><code>boolean.truthy(value)</code></a></li>
+<li><a href="#booleanfalsyvalue"><code>boolean.falsy(value)</code></a></li>
+<li><a href="#booleaninsensitiveenabled"><code>boolean.insensitive([enabled])</code></a></li>
+<li><a href="#binary---inherits-from-any"><code>binary</code> - inherits from <code>Any</code></a></li>
+<li><a href="#binaryencodingencoding"><code>binary.encoding(encoding)</code></a></li>
+<li><a href="#binaryminlimit"><code>binary.min(limit)</code></a></li>
+<li><a href="#binarymaxlimit"><code>binary.max(limit)</code></a></li>
+<li><a href="#binarylengthlimit"><code>binary.length(limit)</code></a></li>
+<li><a href="#date---inherits-from-any"><code>date</code> - inherits from <code>Any</code></a></li>
+<li><a href="#datemindate"><code>date.min(date)</code></a></li>
+<li><a href="#datemaxdate"><code>date.max(date)</code></a></li>
+<li><a href="#dateiso"><code>date.iso()</code></a></li>
+<li><a href="#datetimestamptype"><code>date.timestamp([type])</code></a></li>
+<li><a href="#func---inherits-from-any"><code>func</code> - inherits from <code>Any</code></a></li>
+<li><a href="#funcarityn"><code>func.arity(n)</code></a></li>
+<li><a href="#funcminarityn"><code>func.minArity(n)</code></a></li>
+<li><a href="#funcmaxarityn"><code>func.maxArity(n)</code></a></li>
+<li><a href="#funcclass"><code>func.class()</code></a></li>
+<li><a href="#funcref"><code>func.ref()</code></a></li>
+<li><a href="#number---inherits-from-any"><code>number</code> - inherits from <code>Any</code></a></li>
+<li><a href="#numberminlimit"><code>number.min(limit)</code></a></li>
+<li><a href="#numbermaxlimit"><code>number.max(limit)</code></a></li>
+<li><a href="#numbergreaterlimit"><code>number.greater(limit)</code></a></li>
+<li><a href="#numberlesslimit"><code>number.less(limit)</code></a></li>
+<li><a href="#numberinteger"><code>number.integer()</code></a></li>
+<li><a href="#numberprecisionlimit"><code>number.precision(limit)</code></a></li>
+<li><a href="#numbermultiplebase"><code>number.multiple(base)</code></a></li>
+<li><a href="#numberpositive"><code>number.positive()</code></a></li>
+<li><a href="#numbernegative"><code>number.negative()</code></a></li>
+<li><a href="#object---inherits-from-any"><code>object</code> - inherits from <code>Any</code></a></li>
+<li><a href="#objectkeysschema"><code>object.keys([schema])</code></a><ul>
+<li><a href="#-notation"><code>{} notation</code></a></li>
+<li><a href="#joiobjectschema-notation"><code>Joi.object([schema]) notation</code></a></li>
+<li><a href="#joiobjectkeysschema-notation"><code>Joi.object().keys([schema]) notation</code></a></li></ul></li>
+<li><a href="#objectminlimit"><code>object.min(limit)</code></a></li>
+<li><a href="#objectmaxlimit"><code>object.max(limit)</code></a></li>
+<li><a href="#objectlengthlimit"><code>object.length(limit)</code></a></li>
+<li><a href="#objectpatternregex-schema"><code>object.pattern(regex, schema)</code></a></li>
+<li><a href="#objectandpeers"><code>object.and(peers)</code></a></li>
+<li><a href="#objectnandpeers"><code>object.nand(peers)</code></a></li>
+<li><a href="#objectorpeers"><code>object.or(peers)</code></a></li>
+<li><a href="#objectxorpeers"><code>object.xor(peers)</code></a></li>
+<li><a href="#objectwithkey-peers"><code>object.with(key, peers)</code></a></li>
+<li><a href="#objectwithoutkey-peers"><code>object.without(key, peers)</code></a></li>
+<li><a href="#objectrenamefrom-to-options"><code>object.rename(from, to, [options])</code></a></li>
+<li><a href="#objectassertref-schema-message"><code>object.assert(ref, schema, [message])</code></a></li>
+<li><a href="#objectunknownallow"><code>object.unknown([allow])</code></a></li>
+<li><a href="#objecttypeconstructor-name"><code>object.type(constructor, [name])</code></a></li>
+<li><a href="#objectschema"><code>object.schema()</code></a></li>
+<li><a href="#objectrequiredkeyschildren"><code>object.requiredKeys(children)</code></a></li>
+<li><a href="#objectoptionalkeyschildren"><code>object.optionalKeys(children)</code></a></li>
+<li><a href="#objectforbiddenkeyschildren"><code>object.forbiddenKeys(children)</code></a></li>
+<li><a href="#string---inherits-from-any"><code>string</code> - inherits from <code>Any</code></a></li>
+<li><a href="#stringinsensitive"><code>string.insensitive()</code></a></li>
+<li><a href="#stringminlimit-encoding"><code>string.min(limit, [encoding])</code></a></li>
+<li><a href="#stringmaxlimit-encoding"><code>string.max(limit, [encoding])</code></a></li>
+<li><a href="#stringtruncateenabled"><code>string.truncate([enabled])</code></a></li>
+<li><a href="#stringcreditcard"><code>string.creditCard()</code></a></li>
+<li><a href="#stringlengthlimit-encoding"><code>string.length(limit, [encoding])</code></a></li>
+<li><a href="#stringregexpattern-name--options"><code>string.regex(pattern, [name | options])</code></a></li>
+<li><a href="#stringreplacepattern-replacement"><code>string.replace(pattern, replacement)</code></a></li>
+<li><a href="#stringalphanum"><code>string.alphanum()</code></a></li>
+<li><a href="#stringtoken"><code>string.token()</code></a></li>
+<li><a href="#stringemailoptions"><code>string.email([options])</code></a></li>
+<li><a href="#stringipoptions"><code>string.ip([options])</code></a></li>
+<li><a href="#stringurioptions"><code>string.uri([options])</code></a></li>
+<li><a href="#stringguid---aliases-uuid"><code>string.guid()</code> - aliases: <code>uuid</code></a></li>
+<li><a href="#stringhex"><code>string.hex()</code></a></li>
+<li><a href="#stringbase64options"><code>string.base64([options])</code></a></li>
+<li><a href="#stringhostname"><code>string.hostname()</code></a></li>
+<li><a href="#stringnormalizeform"><code>string.normalize([form])</code></a></li>
+<li><a href="#stringlowercase"><code>string.lowercase()</code></a></li>
+<li><a href="#stringuppercase"><code>string.uppercase()</code></a></li>
+<li><a href="#stringtrim"><code>string.trim()</code></a></li>
+<li><a href="#stringisodate"><code>string.isoDate()</code></a></li>
+<li><a href="#alternatives---inherits-from-any"><code>alternatives</code> - inherits from <code>Any</code></a></li>
+<li><a href="#alternativestryschemas"><code>alternatives.try(schemas)</code></a></li>
+<li><a href="#alternativeswhencondition-options"><code>alternatives.when(condition, options)</code></a></li>
+<li><a href="#lazyfn---inherits-from-any"><code>lazy(fn)</code> - inherits from <code>Any</code></a></li></ul></li>
+<li><a href="#errors">Errors</a></li>
+</ul>
+<!-- tocstop -->
+<h2 id="joi">Joi</h2>
+<h3 id="version"><code>version</code></h3>
+<p>Property showing the current version of joi being used.</p>
+<h3 id="validatevalue-schema-options-callback"><code>validate(value, schema, [options], [callback])</code></h3>
+<p>Validates a value using the given schema and options where:</p>
+<ul>
+<li><code>value</code> - the value being validated.</li>
+<li><code>schema</code> - the validation schema. Can be a <strong>joi</strong> type object or a plain object where every key is assigned a <strong>joi</strong> type object using <a href="#compileschema"><code>Joi.compile</code></a> (be careful of the cost of compiling repeatedly the same schemas).</li>
+<li><code>options</code> - an optional object with the following optional keys:<ul>
+<li><code>abortEarly</code> - when <code>true</code>, stops validation on the first error, otherwise returns all the errors found. Defaults to <code>true</code>.</li>
+<li><code>convert</code> - when <code>true</code>, attempts to cast values to the required types (e.g. a string to a number). Defaults to <code>true</code>.</li>
+<li><code>allowUnknown</code> - when <code>true</code>, allows object to contain unknown keys which are ignored. Defaults to <code>false</code>.</li>
+<li><code>skipFunctions</code> - when <code>true</code>, ignores unknown keys with a function value. Defaults to <code>false</code>.</li>
+<li><code>stripUnknown</code> - remove unknown elements from objects and arrays. Defaults to <code>false</code>.</li>
+<li>when <code>true</code>, all unknown elements will be removed.</li>
+<li>when an <code>object</code> :<ul>
+<li><code>arrays</code> - set to <code>true</code> to remove unknown items from arrays.</li>
+<li><code>objects</code> - set to <code>true</code> to remove unknown keys from objects.</li></ul></li>
+<li><code>language</code> - overrides individual error messages. Defaults to no override (<code>{}</code>). Messages apply the following rules :</li>
+<li>variables are put between curly braces like <code>{{var}}</code>, if prefixed by a <code>!</code> like <code>{{!var}}</code>, it will be html escaped if the option <code>escapeHtml</code> is also set to <code>true</code></li>
+<li>strings are always preceeded by the key name, unless a <code>{{key}}</code> is found elsewhere or if the string is prefixed by a <code>!!</code></li>
+<li>when <code>'label'</code> is set, it overrides the key name in the error message</li>
+<li>to better understand the structure of the language, it's advised to have a look at the existing messages you want to override <a href="lib/language.js">here</a></li>
+<li><code>presence</code> - sets the default presence requirements. Supported modes: <code>'optional'</code>, <code>'required'</code>, and <code>'forbidden'</code>.<br />
+Defaults to <code>'optional'</code>.</li>
+<li><code>context</code> - provides an external data set to be used in <a href="#refkey-options">references</a>. Can only be set as an external option to<br />
+<code>validate()</code> and not using <code>any.options()</code>.</li>
+<li><code>noDefaults</code> - when <code>true</code>, do not apply default values. Defaults to <code>false</code>.</li>
+<li><code>escapeHtml</code> - when <code>true</code>, error message templates will escape special characters to HTML entities, for security purposes. Defaults to <code>false</code>.</li></ul></li>
+<li><code>callback</code> - the optional synchronous callback method using the signature <code>function(err, value)</code> where:<ul>
+<li><code>err</code> - if validation failed, the <a href="#errors">error</a> reason, otherwise <code>null</code>.</li>
+<li><code>value</code> - the validated value with any type conversions and other modifiers applied (the input is left unchanged). <code>value</code> can be<br />
+incomplete if validation failed and <code>abortEarly</code> is <code>true</code>. If callback is not provided, then returns an object with <a href="#errors">error</a><br />
+and value properties.</li></ul></li>
+</ul>
+<p>When used without a callback, this function returns a Promise-like object that can be used as a promise, or as a simple object like in the below examples.</p>
+<pre><code class="js language-js">const schema = {
+    a: Joi.number()
+};
+
+const value = {
+    a: '123'
+};
+
+Joi.validate(value, schema, (err, value) =&gt; { });
+// err -&gt; null
+// value.a -&gt; 123 (number, not string)
+
+// or
+const result = Joi.validate(value, schema);
+// result.error -&gt; null
+// result.value -&gt; { "a" : 123 }
+
+// or
+const promise = Joi.validate(value, schema);
+promise.then((value) =&gt; {
+    // value -&gt; { "a" : 123 }
+});</code></pre>
+<h3 id="compileschema"><code>compile(schema)</code></h3>
+<p>Converts literal schema definition to <strong>joi</strong> schema object (or returns the same back if already a <strong>joi</strong> schema object) where:</p>
+<ul>
+<li><code>schema</code> - the schema definition to compile.</li>
+</ul>
+<pre><code class="js language-js">const definition = ['key', 5, { a: true, b: [/^a/, 'boom'] }];
+const schema = Joi.compile(definition);
+
+// Same as:
+
+const schema = Joi.alternatives().try([
+    Joi.string().valid('key'),
+    Joi.number().valid(5),
+    Joi.object().keys({
+        a: Joi.boolean().valid(true),
+        b: Joi.alternatives().try([
+            Joi.string().regex(/^a/),
+            Joi.string().valid('boom')
+        ])
+    })
+]);</code></pre>
+<h3 id="assertvalue-schema-message"><code>assert(value, schema, [message])</code></h3>
+<p>Validates a value against a schema and <a href="#errors">throws</a> if validation fails where:</p>
+<ul>
+<li><code>value</code> - the value to validate.</li>
+<li><code>schema</code> - the validation schema. Can be a <strong>joi</strong> type object or a plain object where every key is assigned a <strong>joi</strong> type object using <a href="#compileschema"><code>Joi.compile</code></a> (be careful of the cost of compiling repeatedly the same schemas).</li>
+<li><code>message</code> - optional message string prefix added in front of the error message. may also be an Error object.</li>
+</ul>
+<pre><code class="js language-js">Joi.assert('x', Joi.number());</code></pre>
+<h3 id="attemptvalue-schema-message"><code>attempt(value, schema, [message])</code></h3>
+<p>Validates a value against a schema, returns valid object, and <a href="#errors">throws</a> if validation fails where:</p>
+<ul>
+<li><code>value</code> - the value to validate.</li>
+<li><code>schema</code> - the validation schema. Can be a <strong>joi</strong> type object or a plain object where every key is assigned a <strong>joi</strong> type object using <a href="#compileschema"><code>Joi.compile</code></a> (be careful of the cost of compiling repeatedly the same schemas).</li>
+<li><code>message</code> - optional message string prefix added in front of the error message. may also be an Error object.</li>
+</ul>
+<pre><code class="js language-js">Joi.attempt('x', Joi.number()); // throws error
+const result = Joi.attempt('4', Joi.number()); // result -&gt; 4</code></pre>
+<h3 id="refkey-options"><code>ref(key, [options])</code></h3>
+<p>Generates a reference to the value of the named key. References are resolved at validation time and in order of dependency<br />
+so that if one key validation depends on another, the dependent key is validated second after the reference is validated.<br />
+References support the following arguments:</p>
+<ul>
+<li><code>key</code> - the reference target. References cannot point up the object tree, only to sibling keys, but they can point to<br />
+their siblings' children (e.g. 'a.b.c') using the <code>.</code> separator. If a <code>key</code> starts with <code>$</code> is signifies a context reference<br />
+which is looked up in the <code>context</code> option object.</li>
+<li><code>options</code> - optional settings:<ul>
+<li><code>separator</code> - overrides the default <code>.</code> hierarchy separator.</li>
+<li><code>contextPrefix</code> - overrides the default <code>$</code> context prefix signifier.</li>
+<li>Other options can also be passed based on what <a href="https://github.com/hapijs/hoek/blob/master/API.md#reachobj-chain-options"><code>Hoek.reach</code></a> supports.</li></ul></li>
+</ul>
+<p>Note that references can only be used where explicitly supported such as in <code>valid()</code> or <code>invalid()</code> rules. If upwards<br />
+(parents) references are needed, use <a href="#objectassertref-schema-message"><code>object.assert()</code></a>.</p>
+<pre><code class="js language-js">const schema = Joi.object().keys({
+    a: Joi.ref('b.c'),
+    b: {
+        c: Joi.any()
+    },
+    c: Joi.ref('$x')
+});
+
+Joi.validate({ a: 5, b: { c: 5 } }, schema, { context: { x: 5 } }, (err, value) =&gt; {});</code></pre>
+<h3 id="isrefref"><code>isRef(ref)</code></h3>
+<p>Checks whether or not the provided argument is a reference.<br />
+It's especially useful if you want to post-process error messages.</p>
+<pre><code class="js language-js">const ref = Joi.ref('a');
+Joi.isRef(ref); // returns true</code></pre>
+<h3 id="reachschema-path"><code>reach(schema, path)</code></h3>
+<p>Get a sub-schema of an existing schema based on a path. Path separator is a dot (<code>.</code>).</p>
+<pre><code class="js language-js">const schema = Joi.object({ foo: Joi.object({ bar: Joi.number() }) });
+const number = Joi.reach(schema, 'foo.bar');</code></pre>
+<h3 id="defaultsfn"><code>defaults(fn)</code></h3>
+<p>Creates a new Joi instance that will apply defaults onto newly created schemas through the use of the <code>fn</code> function that takes exactly one argument, the schema being created.</p>
+<p>The function must always return a schema, even if untransformed.</p>
+<pre><code class="js language-js">const defaultJoi = Joi.defaults((schema) =&gt; {
+
+    switch (schema.schemaType) {
+        case 'string':
+            return schema.allow('');
+        case 'object':
+            return schema.min(1);
+        default:
+            return schema;
+    }
+});
+
+const schema = defaultJoi.object(); // Equivalent to a Joi.object().min(1)</code></pre>
+<h3 id="extendextension"><code>extend(extension)</code></h3>
+<p>Creates a new Joi instance customized with the extension(s) you provide included.</p>
+<p>It is <strong>important</strong> to understand that original Joi library is not modified by this.</p>
+<h4 id="terms">Terms</h4>
+<p>The extension makes use of some common structures that need to be described prior :</p>
+<ul>
+<li><code>value</code> - the value being processed by Joi.</li>
+<li><code>state</code> - an object containing the current context of validation.<ul>
+<li><code>key</code> - the key of the current value.</li>
+<li><code>path</code> - the full path of the current value.</li>
+<li><code>parent</code> - the potential parent of the current value.</li></ul></li>
+<li><code>options</code> - options object provided through <a href="#anyoptionsoptions"><code>any().options()</code></a> or <a href="#validatevalue-schema-options-callback"><code>Joi.validate()</code></a>.</li>
+</ul>
+<h4 id="extension">Extension</h4>
+<p><code>extension</code> can be :</p>
+<ul>
+<li>a single extension object</li>
+<li>a factory function generating an extension object</li>
+<li>or an array of those</li>
+</ul>
+<p>Extension objects use the following parameters :</p>
+<ul>
+<li><code>name</code> - name of the new type you are defining, this can be an existing type. <strong>Required</strong>.</li>
+<li><code>base</code> - an existing Joi schema to base your type upon. Defaults to <code>Joi.any()</code>.</li>
+<li><code>coerce</code> - an optional function that runs before the base, usually serves when you want to coerce values of a different type than your base. It takes 3 arguments <code>value</code>, <code>state</code> and <code>options</code>.</li>
+<li><code>pre</code> - an optional function that runs first in the validation chain, usually serves when you need to cast values. It takes 3 arguments <code>value</code>, <code>state</code> and <code>options</code>.</li>
+<li><code>language</code> - an optional object to add error definitions. Every key will be prefixed by the type name.</li>
+<li><code>describe</code> - an optional function taking the fully formed description to post-process it.</li>
+<li><code>rules</code> - an optional array of rules to add.<ul>
+<li><code>name</code> - name of the new rule. <strong>Required</strong>.</li>
+<li><code>params</code> - an optional object containing Joi schemas of each parameter ordered. You can also pass a single Joi schema as long as it is a <code>Joi.object()</code>, of course some methods such as <code>pattern</code> or <code>rename</code> won't be useful or won't work at all in this given context.</li>
+<li><code>setup</code> - an optional function that takes an object with the provided parameters to allow for internals manipulation of the schema when a rule is set, you can optionally return a new Joi schema that will be taken as the new schema instance. At least one of <code>setup</code> or <code>validate</code> <strong>must</strong> be provided.</li>
+<li><code>validate</code> - an optional function to validate values that takes 4 parameters <code>params</code>, <code>value</code>, <code>state</code> and <code>options</code>. At least one of <code>setup</code> or <code>validate</code> <strong>must</strong> be provided.</li>
+<li><code>description</code> - an optional string or function taking the parameters as argument to describe what the rule is doing.</li></ul></li>
+</ul>
+<p>Factory functions are advised if you intend to publish your extensions for others to use, because they are capable of using an extended joi being built, thus avoiding any erasure when using multiple extensions at the same time. See an example of a factory function in the section below.</p>
+<h4 id="npm-note">npm note</h4>
+<p>If you publish your extension on npm, make sure to add <code>joi</code> and <code>extension</code> as keywords so that it's discoverable more easily.</p>
+<h4 id="examples">Examples</h4>
+<pre><code class="js language-js">const Joi = require('joi');
+const customJoi = Joi.extend((joi) =&gt; ({
+    base: joi.number(),
+    name: 'number',
+    language: {
+        round: 'needs to be a rounded number', // Used below as 'number.round'
+        dividable: 'needs to be dividable by {{q}}'
+    },
+    pre(value, state, options) {
+
+        if (options.convert &amp;&amp; this._flags.round) {
+            return Math.round(value); // Change the value
+        }
+
+        return value; // Keep the value as it was
+    },
+    rules: [
+        {
+            name: 'round',
+            setup(params) {
+
+                this._flags.round = true; // Set a flag for later use
+            },
+            validate(params, value, state, options) {
+
+                if (value % 1 !== 0) {
+                    // Generate an error, state and options need to be passed
+                    return this.createError('number.round', { v: value }, state, options);
+                }
+
+                return value; // Everything is OK
+            }
+        },
+        {
+            name: 'dividable',
+            params: {
+                q: joi.alternatives([joi.number().required(), joi.func().ref()])
+            },
+            validate(params, value, state, options) {
+
+                if (value % params.q !== 0) {
+                    // Generate an error, state and options need to be passed, q is used in the language
+                    return this.createError('number.dividable', { v: value, q: params.q }, state, options);
+                }
+
+                return value; // Everything is OK
+            }
+        }
+    ]
+}));
+
+const schema = customJoi.number().round().dividable(3);</code></pre>
+<h3 id="any"><code>any</code></h3>
+<p>Generates a schema object that matches any data type.</p>
+<pre><code class="js language-js">const any = Joi.any();
+any.validate('a', (err, value) =&gt; { });</code></pre>
+<h4 id="schematype"><code>schemaType</code></h4>
+<p>Gets the type of the schema.</p>
+<pre><code class="js language-js">const schema = Joi.string();
+
+schema.schemaType === 'string';   // === true</code></pre>
+<h4 id="anyvalidatevalue-options-callback"><code>any.validate(value, [options], [callback])</code></h4>
+<p>Validates a value using the schema and options where:</p>
+<ul>
+<li><code>value</code> - the value being validated.</li>
+<li><code>options</code> - an object with the same optional keys as <a href="#validatevalue-schema-options-callback"><code>Joi.validate(value, schema, options, callback)</code></a>.</li>
+<li><code>callback</code> - an optional synchronous callback method using the the same signature as <a href="#validatevalue-schema-options-callback"><code>Joi.validate(value, schema, options, callback)</code></a>.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object({
+    a: Joi.number()
+});
+
+const value = {
+    a: '123'
+};
+
+schema.validate(value, (err, value) =&gt; { });
+// err -&gt; null
+// value.a -&gt; 123 (number, not string)
+
+// or
+const result = schema.validate(value);
+// result.error -&gt; null
+// result.value -&gt; { "a" : 123 }
+
+// or
+const promise = schema.validate(value);</code></pre>
+<h4 id="anyallowvalue"><code>any.allow(value)</code></h4>
+<p>Whitelists a value where:</p>
+<ul>
+<li><code>value</code> - the allowed value which can be of any type and will be matched against the validated value before applying any other rules.<br />
+<code>value</code> can be an array of values, or multiple values can be passed as individual arguments. <code>value</code> supports <a href="#refkey-options">references</a>.</li>
+</ul>
+<p>Note that this whitelist of allowed values is in <em>addition</em> to any other permitted values.<br />
+To create an exclusive whitelist of values, see <a href="#anyvalidvalue"><code>any.valid(value)</code></a>.</p>
+<pre><code class="js language-js">const schema = {
+    a: Joi.any().allow('a'),
+    b: Joi.any().allow('b', 'B'),
+    c: Joi.any().allow(['c', 'C'])
+};</code></pre>
+<h4 id="anyvalidvalue---aliases-only-equal"><code>any.valid(value)</code> - aliases: <code>only</code>, <code>equal</code></h4>
+<p>Adds the provided values into the allowed whitelist and marks them as the only valid values allowed where:</p>
+<ul>
+<li><code>value</code> - the allowed value which can be of any type and will be matched against the validated value before applying any other rules.<br />
+<code>value</code> can be an array of values, or multiple values can be passed as individual arguments. <code>value</code> supports <a href="#refkey-options">references</a>.</li>
+</ul>
+<pre><code class="js language-js">const schema = {
+    a: Joi.any().valid('a'),
+    b: Joi.any().valid('b', 'B'),
+    c: Joi.any().valid(['c', 'C'])
+};</code></pre>
+<h4 id="anyinvalidvalue---aliases-disallow-not"><code>any.invalid(value)</code> - aliases: <code>disallow</code>, <code>not</code></h4>
+<p>Blacklists a value where:</p>
+<ul>
+<li><code>value</code> - the forbidden value which can be of any type and will be matched against the validated value before applying any other rules.<br />
+<code>value</code> can be an array of values, or multiple values can be passed as individual arguments. <code>value</code> supports <a href="#refkey-options">references</a>.</li>
+</ul>
+<pre><code class="js language-js">const schema = {
+    a: Joi.any().invalid('a'),
+    b: Joi.any().invalid('b', 'B'),
+    c: Joi.any().invalid(['c', 'C'])
+};</code></pre>
+<h4 id="anyrequired---aliases-exist"><code>any.required()</code> - aliases: <code>exist</code></h4>
+<p>Marks a key as required which will not allow <code>undefined</code> as value. All keys are optional by default.</p>
+<pre><code class="js language-js">const schema = Joi.any().required();</code></pre>
+<h4 id="anyoptional"><code>any.optional()</code></h4>
+<p>Marks a key as optional which will allow <code>undefined</code> as values. Used to annotate the schema for readability as all keys are optional by default.</p>
+<p>Note: this does not allow a <code>null</code> value. To do that, use <a href="#anyallowvalue"><code>any.allow(value)</code></a>. Or both!</p>
+<pre><code class="js language-js">const schema = Joi.any().optional();</code></pre>
+<h4 id="anyforbidden"><code>any.forbidden()</code></h4>
+<p>Marks a key as forbidden which will not allow any value except <code>undefined</code>. Used to explicitly forbid keys.</p>
+<pre><code class="js language-js">const schema = {
+    a: Joi.any().forbidden()
+};</code></pre>
+<h4 id="anystrip"><code>any.strip()</code></h4>
+<p>Marks a key to be removed from a resulting object or array after validation. Used to sanitize output.</p>
+<pre><code class="js language-js">const schema = Joi.object({
+    username: Joi.string(),
+    password: Joi.string().strip()
+});
+
+schema.validate({ username: 'test', password: 'hunter2' }, (err, value) =&gt; {
+    // value = { username: 'test' }
+});
+
+const schema = Joi.array().items(Joi.string(), Joi.any().strip());
+
+schema.validate(['one', 'two', true, false, 1, 2], (err, value) =&gt; {
+    // value = ['one', 'two']
+});</code></pre>
+<h4 id="anydescriptiondesc"><code>any.description(desc)</code></h4>
+<p>Annotates the key where:</p>
+<ul>
+<li><code>desc</code> - the description string.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.any().description('this key will match anything you give it');</code></pre>
+<h4 id="anynotesnotes"><code>any.notes(notes)</code></h4>
+<p>Annotates the key where:</p>
+<ul>
+<li><code>notes</code> - the notes string or array of strings.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.any().notes(['this is special', 'this is important']);</code></pre>
+<h4 id="anytagstags"><code>any.tags(tags)</code></h4>
+<p>Annotates the key where:</p>
+<ul>
+<li><code>tags</code> - the tag string or array of strings.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.any().tags(['api', 'user']);</code></pre>
+<h4 id="anymetameta"><code>any.meta(meta)</code></h4>
+<p>Attaches metadata to the key where:</p>
+<ul>
+<li><code>meta</code> - the meta object to attach.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.any().meta({ index: true });</code></pre>
+<h4 id="anyexamplevalue"><code>any.example(value)</code></h4>
+<p>Annotates the key where:</p>
+<ul>
+<li><code>value</code> - an example value.</li>
+</ul>
+<p>If the example fails to pass validation, the function will throw.</p>
+<pre><code class="js language-js">const schema = Joi.string().min(4).example('abcd');</code></pre>
+<h4 id="anyunitname"><code>any.unit(name)</code></h4>
+<p>Annotates the key where:</p>
+<ul>
+<li><code>name</code> - the unit name of the value.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.number().unit('milliseconds');</code></pre>
+<h4 id="anyoptionsoptions"><code>any.options(options)</code></h4>
+<p>Overrides the global <code>validate()</code> options for the current key and any sub-key where:</p>
+<ul>
+<li><code>options</code> - an object with the same optional keys as <a href="#validatevalue-schema-options-callback"><code>Joi.validate(value, schema, options, callback)</code></a>.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.any().options({ convert: false });</code></pre>
+<h4 id="anystrictisstrict"><code>any.strict(isStrict)</code></h4>
+<p>Strict mode sets the <code>options.convert</code> options to <code>false</code> which prevent type casting for the current key and any child keys.</p>
+<ul>
+<li><code>isStrict</code> - whether strict mode is enabled or not. Defaults to true.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.any().strict();</code></pre>
+<h4 id="anydefaultvalue-description"><code>any.default([value, [description]])</code></h4>
+<p>Sets a default value if the original value is undefined where:</p>
+<ul>
+<li><code>value</code> - the value.<ul>
+<li><code>value</code> supports <a href="#refkey-options">references</a>.</li>
+<li><code>value</code> may also be a function which returns the default value. If <code>value</code> is specified as a function that accepts a single parameter, that parameter will be a context object that can be used to derive the resulting value.</li>
+<li>Use a function when setting a dynamic value, such as the current time. Ex: <code>default(Date.now, 'time of creation')</code></li>
+<li><strong>Caution: this clones the object</strong>, which incurs some overhead so if you don't need access to the context define your method so that it does not accept any parameters.</li>
+<li>without any <code>value</code>, <code>default</code> has no effect, except for <code>object</code> that will then create nested defaults (applying inner defaults of that object).</li></ul></li>
+</ul>
+<p>Note that if <code>value</code> is an object, any changes to the object after <code>default()</code> is called will change the reference<br />
+and any future assignment.</p>
+<p>Additionally, when specifying a method you must either have a <code>description</code> property on your method or the second parameter is required.</p>
+<pre><code class="js language-js">const generateUsername = (context) =&gt; {
+
+  return context.firstname.toLowerCase() + '-' + context.lastname.toLowerCase();
+};
+generateUsername.description = 'generated username';
+
+const schema = {
+    username: Joi.string().default(generateUsername),
+    firstname: Joi.string(),
+    lastname: Joi.string(),
+    created: Joi.date().default(Date.now, 'time of creation'),
+    status: Joi.string().default('registered')
+};
+
+Joi.validate({
+    firstname: 'Jane',
+    lastname: 'Doe'
+}, schema, (err, value) =&gt; {
+
+    // value.status === 'registered'
+    // value.username === 'jane-doe'
+    // value.created will be the time of validation
+});</code></pre>
+<h4 id="anyconcatschema"><code>any.concat(schema)</code></h4>
+<p>Returns a new type that is the result of adding the rules of one type to another where:</p>
+<ul>
+<li><code>schema</code> - a <strong>joi</strong> type to merge into the current schema. Can only be of the same type as the context type or <code>any</code>. If applied to an <code>any</code> type, the schema can be any other schema.</li>
+</ul>
+<pre><code class="js language-js">const a = Joi.string().valid('a');
+const b = Joi.string().valid('b');
+const ab = a.concat(b);</code></pre>
+<h4 id="anywhencondition-options"><code>any.when(condition, options)</code></h4>
+<p>Converts the type into an <a href="#alternatives"><code>alternatives</code></a> type where the conditions are merged into the type definition where:</p>
+<ul>
+<li><code>condition</code> - the key name or <a href="#refkey-options">reference</a>, or a schema.</li>
+<li><code>options</code> - an object with:<ul>
+<li><code>is</code> - the required condition <strong>joi</strong> type. Anything that is not a joi schema will be converted using <a href="#compileschema">Joi.compile</a>. Forbidden when <code>condition</code> is a schema.</li>
+<li><code>then</code> - the alternative schema type if the condition is true. Required if <code>otherwise</code> is missing.</li>
+<li><code>otherwise</code> - the alternative schema type if the condition is false. Required if <code>then</code> is missing.</li></ul></li>
+</ul>
+<p>Note: by default, the <code>is</code> condition schema allows for <code>undefined</code> values. Use <code>.required()</code> to override.<br />
+For example, use <code>is: Joi.number().required()</code> to guarantee that a joi reference exists and is a number.</p>
+<pre><code class="js language-js">const schema = {
+    a: Joi.any().valid('x').when('b', { is: Joi.exist(), then: Joi.valid('y'), otherwise: Joi.valid('z') }),
+    b: Joi.any()
+};</code></pre>
+<p>Or with a schema:</p>
+<pre><code class="js language-js">const schema = Joi.object({
+    a: Joi.any().valid('x'),
+    b: Joi.any()
+}).when(Joi.object({ b: Joi.exist() }).unknown(), {
+    then: Joi.object({
+        a: Joi.valid('y')
+    }),
+    otherwise: Joi.object({
+        a: Joi.valid('z')
+    }) 
+});</code></pre>
+<p>Note that this style is much more useful when your whole schema depends on the value of one of its property, or if you find yourself repeating the check for many keys of an object.</p>
+<p>Alternatively, if you want to specify a specific type such as <code>string</code>, <code>array</code>, etc, you can do so like this:</p>
+<pre><code class="js language-js">const schema = {
+    a: Joi.valid('a', 'b', 'other'),
+    other: Joi.string()
+        .when('a', { is: 'other', then: Joi.required() }),
+};</code></pre>
+<p>If you need to validate a child key inside a nested object based on a sibling's value, you can do so like this:</p>
+<pre><code class="js language-js">const schema = Joi.object().keys({
+    a: Joi.boolean().required(),
+    b: Joi.object()
+        .keys({
+            c: Joi.string(),
+            d: Joi.number().required()
+        })
+        .required()
+        .when('a', {
+            is: true,
+            then: Joi.object({ c: Joi.required() })        // b.c is required only when a is true
+        })
+});</code></pre>
+<p>If you want to validate one key based on the existence of another key, you can do so like the following (notice the use of <code>required()</code>):</p>
+<pre><code class="js language-js">const schema = Joi.object().keys({
+    min: Joi.number(),
+    max: Joi.number().when('min', {
+        is: Joi.number().required(),
+        then: Joi.number().greater(Joi.ref('min')),
+    }),
+});</code></pre>
+<h4 id="anylabelname"><code>any.label(name)</code></h4>
+<p>Overrides the key name in error messages.</p>
+<ul>
+<li><code>name</code> - the name of the key.</li>
+</ul>
+<pre><code class="js language-js">const schema = {
+    first_name: Joi.string().label('First Name')
+};</code></pre>
+<h4 id="anyrawisraw"><code>any.raw(isRaw)</code></h4>
+<p>Outputs the original untouched value instead of the casted value.</p>
+<ul>
+<li><code>isRaw</code> - whether to enable raw mode or not. Defaults to true.</li>
+</ul>
+<pre><code class="js language-js">const timestampSchema = Joi.date().timestamp();
+timestampSchema.validate('12376834097810'); // { error: null, value: Sat Mar 17 2362 04:28:17 GMT-0500 (CDT) }
+
+const rawTimestampSchema = Joi.date().timestamp().raw();
+rawTimestampSchema.validate('12376834097810'); // { error: null, value: '12376834097810' }</code></pre>
+<h4 id="anyemptyschema"><code>any.empty(schema)</code></h4>
+<p>Considers anything that matches the schema to be empty (<code>undefined</code>).</p>
+<ul>
+<li><code>schema</code> - any object or joi schema to match. An undefined schema unsets that rule.</li>
+</ul>
+<pre><code class="js language-js">let schema = Joi.string().empty('');
+schema.validate(''); // returns { error: null, value: undefined }
+schema = schema.empty();
+schema.validate(''); // returns { error: "value" is not allowed to be empty, value: '' }</code></pre>
+<h4 id="anyerrorerr"><code>any.error(err)</code></h4>
+<p>Overrides the default joi error with a custom error if the rule fails where:</p>
+<ul>
+<li><code>err</code> can be:<ul>
+<li>an instance of <code>Error</code> - the override error.</li>
+<li>a <code>function(errors)</code>, taking an array of errors as argument, where it must either:</li>
+<li>return a <code>string</code> - substitutes the error message with this text</li>
+<li>return a single <code>object</code> or an <code>Array</code> of it, where:<ul>
+<li><code>type</code> - optional parameter providing the type of the error (eg. <code>number.min</code>).</li>
+<li><code>message</code> - optional parameter if <code>template</code> is provided, containing the text of the error.</li>
+<li><code>template</code> - optional parameter if <code>message</code> is provided, containing a template string, using the same format as usual joi language errors.</li>
+<li><code>context</code> - optional parameter, to provide context to your error if you are using the <code>template</code>.</li></ul></li>
+<li>return an <code>Error</code> - same as when you directly provide an <code>Error</code>, but you can customize the error message based on the errors.</li></ul></li>
+</ul>
+<p>Note that if you provide an <code>Error</code>, it will be returned as-is, unmodified and undecorated with any of the<br />
+normal joi error properties. If validation fails and another error is found before the error<br />
+override, that error will be returned and the override will be ignored (unless the <code>abortEarly</code><br />
+option has been set to <code>false</code>).</p>
+<pre><code class="js language-js">let schema = Joi.string().error(new Error('Was REALLY expecting a string'));
+schema.validate(3);     // returns error.message === 'Was REALLY expecting a string'
+
+let schema = Joi.object({
+    foo: Joi.number().min(0).error(() =&gt; '"foo" requires a positive number')
+});
+schema.validate({ foo: -2 });    // returns error.message === 'child "foo" fails because ["foo" requires a positive number]'
+
+let schema = Joi.object({
+    foo: Joi.number().min(0).error((errors) =&gt; {
+
+        return 'found errors with ' + errors.map((err) =&gt; `${err.type}(${err.context.limit}) with value ${err.context.value}`).join(' and ');
+    })
+});
+schema.validate({ foo: -2 });    // returns error.message === 'child "foo" fails because [found errors with number.min(0) with value -2]'
+
+let schema = Joi.object({
+    foo: Joi.number().min(0).error((errors) =&gt; {
+
+        return {
+            template: 'contains {{errors}} errors, here is the list : {{codes}}',
+            context: {
+                errors: errors.length,
+                codes: errors.map((err) =&gt; err.type)
+            }
+        };
+    })
+});
+schema.validate({ foo: -2 });    // returns error.message === 'child "foo" fails because ["foo" contains 1 errors, here is the list : [number.min]]'</code></pre>
+<p>Note that if you want to intercept errors on nested structures such as objects and arrays, you will also get a nested structure to explore the children errors, going one level down through the <code>err.context.reason</code> property.</p>
+<p>If you want a full substitution of the error system, you can hook at the root and render that <code>errors</code> array with whatever templating system you want, just be aware that you will have to crawl the nested errors for the information you want to actually show.</p>
+<h3 id="array---inherits-from-any"><code>array</code> - inherits from <code>Any</code></h3>
+<p>Generates a schema object that matches an array data type. Note that undefined values inside arrays are not allowed by<br />
+default but can be by using <code>sparse()</code>. If the validation <code>convert</code> option is on (enabled by default), a string will be<br />
+converted to an <code>array</code> if specified via <code>JSON.parse()</code>. Also, if <code>convert</code> <code>array.single()</code> are both on, then when a<br />
+single value is specified it will be converted to an <code>array</code>.</p>
+<p>Supports the same methods of the <a href="#any"><code>any()</code></a> type.</p>
+<pre><code class="js language-js">const array = Joi.array().items(Joi.string().valid('a', 'b'));
+array.validate(['a', 'b', 'a'], (err, value) =&gt; { });</code></pre>
+<h4 id="arraysparseenabled"><code>array.sparse([enabled])</code></h4>
+<p>Allows this array to be sparse. <code>enabled</code> can be used with a falsy value to go back to the default behavior.</p>
+<pre><code class="js language-js">let schema = Joi.array().sparse(); // undefined values are now allowed
+schema = schema.sparse(false); // undefined values are now denied</code></pre>
+<h4 id="arraysingleenabled"><code>array.single([enabled])</code></h4>
+<p>Allows single values to be checked against rules as if it were provided as an array.</p>
+<p><code>enabled</code> can be used with a falsy value to go back to the default behavior.</p>
+<pre><code class="js language-js">const schema = Joi.array().items(Joi.number()).single();
+schema.validate([4]); // returns `{ error: null, value: [ 4 ] }`
+schema.validate(4); // returns `{ error: null, value: [ 4 ] }`</code></pre>
+<h4 id="arrayitemstype"><code>array.items(type)</code></h4>
+<p>Lists the types allowed for the array values where:</p>
+<ul>
+<li><code>type</code> - a <strong>joi</strong> schema object to validate each array item against. <code>type</code> can be an array of values, or multiple values can be passed as individual arguments.</li>
+</ul>
+<p>If a given type is <code>.required()</code> then there must be a matching item in the array.<br />
+If a type is <code>.forbidden()</code> then it cannot appear in the array.<br />
+Required items can be added multiple times to signify that multiple items must be found.<br />
+Errors will contain the number of items that didn't match. Any unmatched item having a <a href="#anylabelname">label</a> will be mentioned explicitly.</p>
+<pre><code class="js language-js">const schema = Joi.array().items(Joi.string(), Joi.number()); // array may contain strings and numbers
+const schema = Joi.array().items(Joi.string().required(), Joi.string().required()); // array must contain at least two strings
+const schema = Joi.array().items(Joi.string().valid('not allowed').forbidden(), Joi.string()); // array may contain strings, but none of those strings can match 'not allowed'
+const schema = Joi.array().items(Joi.string().label('My string').required(), Joi.number().required()); // If this fails it can result in `[ValidationError: "value" does not contain [My string] and 1 other required value(s)]`</code></pre>
+<h4 id="arrayorderedtype"><code>array.ordered(type)</code></h4>
+<p>Lists the types in sequence order for the array values where:</p>
+<ul>
+<li><code>type</code> - a <strong>joi</strong> schema object to validate against each array item in sequence order. <code>type</code> can be an array of values, or multiple values can be passed as individual arguments.</li>
+</ul>
+<p>If a given type is <code>.required()</code> then there must be a matching item with the same index position in the array.<br />
+Errors will contain the number of items that didn't match. Any unmatched item having a <a href="#anylabelname">label</a> will be mentioned explicitly.</p>
+<pre><code class="js language-js">const schema = Joi.array().ordered(Joi.string().required(), Joi.number().required()); // array must have first item as string and second item as number
+const schema = Joi.array().ordered(Joi.string().required()).items(Joi.number().required()); // array must have first item as string and 1 or more subsequent items as number
+const schema = Joi.array().ordered(Joi.string().required(), Joi.number()); // array must have first item as string and optionally second item as number</code></pre>
+<h4 id="arrayminlimit"><code>array.min(limit)</code></h4>
+<p>Specifies the minimum number of items in the array where:</p>
+<ul>
+<li><code>limit</code> - the lowest number of array items allowed.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.array().min(2);</code></pre>
+<p>It can also be a reference to another field.</p>
+<pre><code class="js language-js">const schema = Joi.object({
+  limit: Joi.number().integer().required(),
+  numbers: Joi.array().min(Joi.ref('limit')).required()
+});</code></pre>
+<h4 id="arraymaxlimit"><code>array.max(limit)</code></h4>
+<p>Specifies the maximum number of items in the array where:</p>
+<ul>
+<li><code>limit</code> - the highest number of array items allowed.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.array().max(10);</code></pre>
+<p>It can also be a reference to another field.</p>
+<pre><code class="js language-js">const schema = Joi.object({
+  limit: Joi.number().integer().required(),
+  numbers: Joi.array().max(Joi.ref('limit')).required()
+});</code></pre>
+<h4 id="arraylengthlimit"><code>array.length(limit)</code></h4>
+<p>Specifies the exact number of items in the array where:</p>
+<ul>
+<li><code>limit</code> - the number of array items allowed.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.array().length(5);</code></pre>
+<p>It can also be a reference to another field.</p>
+<pre><code class="js language-js">const schema = Joi.object({
+  limit: Joi.number().integer().required(),
+  numbers: Joi.array().length(Joi.ref('limit')).required()
+});</code></pre>
+<h4 id="arrayuniquecomparator"><code>array.unique([comparator])</code></h4>
+<p>Requires the array values to be unique.</p>
+<p>You can provide a custom <code>comparator</code> that is either :</p>
+<ul>
+<li>a function that takes 2 parameters to compare. This function should return whether the 2 parameters are equal or not, you are also <strong>responsible</strong> for this function not to fail, any <code>Error</code> would bubble out of Joi.</li>
+<li>a string in dot notation representing the path of the element to do uniqueness check on. Any missing path will be considered undefined, and can as well only exist once.</li>
+</ul>
+<p>Note: remember that if you provide a custom comparator function, different types can be passed as parameter depending on the rules you set on items.</p>
+<p>Be aware that a deep equality is performed on elements of the array having a type of <code>object</code>, a performance penalty is to be expected for this kind of operation.</p>
+<pre><code class="js language-js">const schema = Joi.array().unique();</code></pre>
+<pre><code class="js language-js">const schema = Joi.array().unique((a, b) =&gt; a.property === b.property);</code></pre>
+<pre><code class="js language-js">const schema = Joi.array().unique('customer.id');</code></pre>
+<h3 id="boolean---inherits-from-any"><code>boolean</code> - inherits from <code>Any</code></h3>
+<p>Generates a schema object that matches a boolean data type. Can also be called via <code>bool()</code>. If the validation <code>convert</code><br />
+option is on (enabled by default), a string (either "true" or "false") will be converted to a <code>boolean</code> if specified.</p>
+<p>Supports the same methods of the <a href="#any"><code>any()</code></a> type.</p>
+<pre><code class="js language-js">const boolean = Joi.boolean();
+boolean.validate(true, (err, value) =&gt; { }); // Valid
+
+boolean.validate(1, (err, value) =&gt; { }); // Invalid</code></pre>
+<h4 id="booleantruthyvalue"><code>boolean.truthy(value)</code></h4>
+<p>Allows for additional values to be considered valid booleans by converting them to <code>true</code> during validation. Accepts a value or an array of values.</p>
+<p>String comparisons are by default case insensitive, see <a href="#booleaninsensitiveenabled"><code>boolean.insensitive()</code></a> to change this behavior.</p>
+<pre><code class="js language-js">const boolean = Joi.boolean().truthy('Y');
+boolean.validate('Y', (err, value) =&gt; { }); // Valid</code></pre>
+<h4 id="booleanfalsyvalue"><code>boolean.falsy(value)</code></h4>
+<p>Allows for additional values to be considered valid booleans by converting them to <code>false</code> during validation. Accepts a value or an array of values.</p>
+<p>String comparisons are by default case insensitive, see <a href="#booleaninsensitiveenabled"><code>boolean.insensitive()</code></a> to change this behavior.</p>
+<pre><code class="js language-js">const boolean = Joi.boolean().falsy('N');
+boolean.validate('N', (err, value) =&gt; { }); // Valid</code></pre>
+<h4 id="booleaninsensitiveenabled"><code>boolean.insensitive([enabled])</code></h4>
+<p>Allows the values provided to <code>truthy</code> and <code>falsy</code> as well as the <code>"true"</code> and <code>"false"</code> default conversion (when not in <code>strict()</code> mode) to be matched in a case insensitive manner.</p>
+<p>Parameters are:</p>
+<ul>
+<li><code>enabled</code> - optional parameter defaulting to <code>true</code> which allows you to reset the behavior of <code>insensitive</code> by providing a falsy value.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.boolean().truthy('yes').falsy('no').insensitive(false);</code></pre>
+<h3 id="binary---inherits-from-any"><code>binary</code> - inherits from <code>Any</code></h3>
+<p>Generates a schema object that matches a Buffer data type. If the validation <code>convert</code> option is on (enabled by default), a string<br />
+will be converted to a Buffer if specified.</p>
+<p>Supports the same methods of the <a href="#any"><code>any()</code></a> type.</p>
+<pre><code class="js language-js">const schema = Joi.binary();</code></pre>
+<h4 id="binaryencodingencoding"><code>binary.encoding(encoding)</code></h4>
+<p>Sets the string encoding format if a string input is converted to a buffer where:</p>
+<ul>
+<li><code>encoding</code> - the encoding scheme.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.binary().encoding('base64');</code></pre>
+<h4 id="binaryminlimit"><code>binary.min(limit)</code></h4>
+<p>Specifies the minimum length of the buffer where:</p>
+<ul>
+<li><code>limit</code> - the lowest size of the buffer.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.binary().min(2);</code></pre>
+<h4 id="binarymaxlimit"><code>binary.max(limit)</code></h4>
+<p>Specifies the maximum length of the buffer where:</p>
+<ul>
+<li><code>limit</code> - the highest size of the buffer.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.binary().max(10);</code></pre>
+<h4 id="binarylengthlimit"><code>binary.length(limit)</code></h4>
+<p>Specifies the exact length of the buffer:</p>
+<ul>
+<li><code>limit</code> - the size of buffer allowed.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.binary().length(5);</code></pre>
+<h3 id="date---inherits-from-any"><code>date</code> - inherits from <code>Any</code></h3>
+<p>Generates a schema object that matches a date type (as well as a JavaScript date string or number of milliseconds). If<br />
+the validation <code>convert</code> option is on (enabled by default), a string or number will be converted to a Date if specified.</p>
+<p>Supports the same methods of the <a href="#any"><code>any()</code></a> type.</p>
+<pre><code class="js language-js">const date = Joi.date();
+date.validate('12-21-2012', (err, value) =&gt; { });</code></pre>
+<h4 id="datemindate"><code>date.min(date)</code></h4>
+<p>Specifies the oldest date allowed where:</p>
+<ul>
+<li><code>date</code> - the oldest date allowed.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.date().min('1-1-1974');</code></pre>
+<p>Notes: <code>'now'</code> can be passed in lieu of <code>date</code> so as to always compare relatively to the current date, allowing to explicitly ensure a date is either in the past or in the future.</p>
+<pre><code class="js language-js">const schema = Joi.date().min('now');</code></pre>
+<p>It can also be a reference to another field.</p>
+<pre><code class="js language-js">const schema = Joi.object({
+  from: Joi.date().required(),
+  to: Joi.date().min(Joi.ref('from')).required()
+});</code></pre>
+<h4 id="datemaxdate"><code>date.max(date)</code></h4>
+<p>Specifies the latest date allowed where:</p>
+<ul>
+<li><code>date</code> - the latest date allowed.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.date().max('12-31-2020');</code></pre>
+<p>Notes: <code>'now'</code> can be passed in lieu of <code>date</code> so as to always compare relatively to the current date, allowing to explicitly ensure a date is either in the past or in the future.</p>
+<pre><code class="js language-js">const schema = Joi.date().max('now');</code></pre>
+<p>It can also be a reference to another field.</p>
+<pre><code class="js language-js">const schema = Joi.object({
+  from: Joi.date().max(Joi.ref('to')).required(),
+  to: Joi.date().required()
+});</code></pre>
+<h4 id="dateiso"><code>date.iso()</code></h4>
+<p>Requires the string value to be in valid ISO 8601 date format.</p>
+<pre><code class="js language-js">const schema = Joi.date().iso();</code></pre>
+<h4 id="datetimestamptype"><code>date.timestamp([type])</code></h4>
+<p>Requires the value to be a timestamp interval from <a href="https://en.wikipedia.org/wiki/Unix_time">Unix Time</a>.</p>
+<ul>
+<li><code>type</code> - the type of timestamp (allowed values are <code>unix</code> or <code>javascript</code> [default])</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.date().timestamp(); // defaults to javascript timestamp
+const schema = Joi.date().timestamp('javascript'); // also, for javascript timestamp (milliseconds)
+const schema = Joi.date().timestamp('unix'); // for unix timestamp (seconds)</code></pre>
+<h3 id="func---inherits-from-any"><code>func</code> - inherits from <code>Any</code></h3>
+<p>Generates a schema object that matches a function type.</p>
+<p>Supports the same methods of the <a href="#object"><code>object()</code></a> type. Note that validating a function keys will cause the function<br />
+to be cloned. While the function will retain its prototype and closure, it will lose its <code>length</code> property value (will be<br />
+set to <code>0</code>).</p>
+<pre><code class="js language-js">const func = Joi.func();
+func.validate(function () {}, (err, value) =&gt; { });</code></pre>
+<h4 id="funcarityn"><code>func.arity(n)</code></h4>
+<p>Specifies the arity of the function where:</p>
+<ul>
+<li><code>n</code> - the arity expected.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.func().arity(2);</code></pre>
+<h4 id="funcminarityn"><code>func.minArity(n)</code></h4>
+<p>Specifies the minimal arity of the function where:</p>
+<ul>
+<li><code>n</code> - the minimal arity expected.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.func().minArity(1);</code></pre>
+<h4 id="funcmaxarityn"><code>func.maxArity(n)</code></h4>
+<p>Specifies the maximal arity of the function where:</p>
+<ul>
+<li><code>n</code> - the maximum arity expected.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.func().maxArity(3);</code></pre>
+<h4 id="funcclass"><code>func.class()</code></h4>
+<p>Requires the function to be a class.</p>
+<pre><code class="js language-js">const schema = Joi.func().class();</code></pre>
+<h4 id="funcref"><code>func.ref()</code></h4>
+<p>Requires the function to be a Joi reference.</p>
+<pre><code class="js language-js">const schema = Joi.func().ref();</code></pre>
+<h3 id="number---inherits-from-any"><code>number</code> - inherits from <code>Any</code></h3>
+<p>Generates a schema object that matches a number data type (as well as strings that can be converted to numbers). If the<br />
+validation <code>convert</code> option is on (enabled by default), a string will be converted to a <code>number</code> if specified. Also, if<br />
+<code>convert</code> is on and <code>number.precision()</code> is used, the value will be converted to the specified <code>precision</code> as well.</p>
+<p><code>Infinity</code> and <code>-Infinity</code> are invalid by default, you can change that behavior by calling <code>allow(Infinity, -Infinity)</code>.</p>
+<p>Supports the same methods of the <a href="#any"><code>any()</code></a> type.</p>
+<pre><code class="js language-js">const number = Joi.number();
+number.validate(5, (err, value) =&gt; { });</code></pre>
+<h4 id="numberminlimit"><code>number.min(limit)</code></h4>
+<p>Specifies the minimum value where:</p>
+<ul>
+<li><code>limit</code> - the minimum value allowed.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.number().min(2);</code></pre>
+<p>It can also be a reference to another field.</p>
+<pre><code class="js language-js">const schema = Joi.object({
+  min: Joi.number().required(),
+  max: Joi.number().min(Joi.ref('min')).required()
+});</code></pre>
+<h4 id="numbermaxlimit"><code>number.max(limit)</code></h4>
+<p>Specifies the maximum value where:</p>
+<ul>
+<li><code>limit</code> - the maximum value allowed.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.number().max(10);</code></pre>
+<p>It can also be a reference to another field.</p>
+<pre><code class="js language-js">const schema = Joi.object({
+  min: Joi.number().max(Joi.ref('max')).required(),
+  max: Joi.number().required()
+});</code></pre>
+<h4 id="numbergreaterlimit"><code>number.greater(limit)</code></h4>
+<p>Specifies that the value must be greater than <code>limit</code>.</p>
+<pre><code class="js language-js">const schema = Joi.number().greater(5);</code></pre>
+<pre><code class="js language-js">const schema = Joi.object({
+  min: Joi.number().required(),
+  max: Joi.number().greater(Joi.ref('min')).required()
+});</code></pre>
+<h4 id="numberlesslimit"><code>number.less(limit)</code></h4>
+<p>Specifies that the value must be less than <code>limit</code>.</p>
+<pre><code class="js language-js">const schema = Joi.number().less(10);</code></pre>
+<p>It can also be a reference to another field.</p>
+<pre><code class="js language-js">const schema = Joi.object({
+  min: Joi.number().less(Joi.ref('max')).required(),
+  max: Joi.number().required()
+});</code></pre>
+<h4 id="numberinteger"><code>number.integer()</code></h4>
+<p>Requires the number to be an integer (no floating point).</p>
+<pre><code class="js language-js">const schema = Joi.number().integer();</code></pre>
+<h4 id="numberprecisionlimit"><code>number.precision(limit)</code></h4>
+<p>Specifies the maximum number of decimal places where:</p>
+<ul>
+<li><code>limit</code> - the maximum number of decimal places allowed.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.number().precision(2);</code></pre>
+<h4 id="numbermultiplebase"><code>number.multiple(base)</code></h4>
+<p>Specifies that the value must be a multiple of <code>base</code>:</p>
+<pre><code class="js language-js">const schema = Joi.number().multiple(3);</code></pre>
+<p>Notes: <code>Joi.number.multiple(base)</code> <em>uses the modulo operator (%) to determine if a number is multiple of another number.
+Therefore, it has the normal limitations of Javascript modulo operator. The results with decimal/floats maybe incorrect.</em></p>
+<h4 id="numberpositive"><code>number.positive()</code></h4>
+<p>Requires the number to be positive.</p>
+<pre><code class="js language-js">const schema = Joi.number().positive();</code></pre>
+<h4 id="numbernegative"><code>number.negative()</code></h4>
+<p>Requires the number to be negative.</p>
+<pre><code class="js language-js">const schema = Joi.number().negative();</code></pre>
+<h3 id="object---inherits-from-any"><code>object</code> - inherits from <code>Any</code></h3>
+<p>Generates a schema object that matches an object data type (as well as JSON strings that parsed into objects). Defaults<br />
+to allowing any child key. If the validation <code>convert</code> option is on (enabled by default), a string will be converted to<br />
+an <code>object</code> if specified via <code>JSON.parse()</code>.</p>
+<p>Supports the same methods of the <a href="#any"><code>any()</code></a> type.</p>
+<pre><code class="js language-js">const object = Joi.object().keys({
+    a: Joi.number().min(1).max(10).integer(),
+    b: 'some string'
+});
+
+object.validate({ a: 5 }, (err, value) =&gt; { });</code></pre>
+<h4 id="objectkeysschema"><code>object.keys([schema])</code></h4>
+<p>Sets or extends the allowed object keys where:</p>
+<ul>
+<li><code>schema</code> - optional object where each key is assigned a <strong>joi</strong> type object. If <code>schema</code> is <code>{}</code> no keys allowed.<br />
+If <code>schema</code> is <code>null</code> or <code>undefined</code>, any key allowed. If <code>schema</code> is an object with keys, the keys are added to any<br />
+previously defined keys (but narrows the selection if all keys previously allowed). Defaults to 'undefined' which<br />
+allows any child key.</li>
+</ul>
+<pre><code class="js language-js">const base = Joi.object().keys({
+    a: Joi.number(),
+    b: Joi.string()
+});
+// Validate keys a, b and c.
+const extended = base.keys({
+    c: Joi.boolean()
+});</code></pre>
+<p>Notes: We have three different ways to define a schema for performing a validation</p>
+<ul>
+<li>Using the plain JS object notation:</li>
+</ul>
+<pre><code class="js language-js">const schema = {
+    a: Joi.string(),
+    b: Joi.number()
+};</code></pre>
+<ul>
+<li>Using the <code>Joi.object([schema])</code> notation</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object({
+    a: Joi.string(),
+    b: Joi.number()
+});</code></pre>
+<ul>
+<li>Using the <code>Joi.object().keys([schema])</code> notation</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().keys({
+    a: Joi.string(),
+    b: Joi.number()
+});</code></pre>
+<p>While all these three objects defined above will result in the same validation object, there are some differences in using one or another:</p>
+<h5 id="-notation"><code>{} notation</code></h5>
+<p>When using the <code>{}</code> notation, you are just defining a plain JS object, which isn't a schema object.<br />
+You can pass it to the validation method but you can't call <code>validate()</code> method of the object because it's just a plain JS object.</p>
+<p>Besides, passing the <code>{}</code> object to the <code>validate()</code> method each time, will perform an expensive schema compilation operation on every validation.</p>
+<h5 id="joiobjectschema-notation"><code>Joi.object([schema]) notation</code></h5>
+<p>Using <code>Joi.object([schema])</code> will return a schema object, so you can call the <code>validate()</code> method directly, e.g:</p>
+<pre><code class="js language-js">const schema = Joi.object({
+    a: Joi.boolean()
+});
+
+schema.validate(true, (err, value) =&gt; {
+    console.log('err: ', err);
+});</code></pre>
+<p>When you use <code>Joi.object([schema])</code>, it gets compiled the first time, so you can pass it to the <code>validate()</code> method multiple times and no overhead is added.</p>
+<p>Another benefits of using <code>Joi.object([schema])</code> instead of a plain JS object is that you can set any options on the object like allowing unknown keys, e.g:</p>
+<pre><code class="js language-js">const schema = Joi.object({
+    arg: Joi.string().valid('firstname', 'lastname', 'title', 'company', 'jobtitle'),
+    value: Joi.string(),
+}).pattern(/firstname|lastname/, Joi.string().min(2));</code></pre>
+<h5 id="joiobjectkeysschema-notation"><code>Joi.object().keys([schema]) notation</code></h5>
+<p>This is basically the same as <code>Joi.object([schema])</code>, but using <code>Joi.object().keys([schema])</code> is more useful when you want to add more keys (e.g. call <code>keys()</code> multiple times). If you are only adding one set of keys, you can skip the <code>keys()</code> method and just use <code>object()</code> directly.</p>
+<p>Some people like to use <code>keys()</code> to make the code more explicit (this is style only).</p>
+<h4 id="objectminlimit"><code>object.min(limit)</code></h4>
+<p>Specifies the minimum number of keys in the object where:</p>
+<ul>
+<li><code>limit</code> - the lowest number of keys allowed.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().min(2);</code></pre>
+<h4 id="objectmaxlimit"><code>object.max(limit)</code></h4>
+<p>Specifies the maximum number of keys in the object where:</p>
+<ul>
+<li><code>limit</code> - the highest number of object keys allowed.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().max(10);</code></pre>
+<h4 id="objectlengthlimit"><code>object.length(limit)</code></h4>
+<p>Specifies the exact number of keys in the object where:</p>
+<ul>
+<li><code>limit</code> - the number of object keys allowed.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().length(5);</code></pre>
+<h4 id="objectpatternregex-schema"><code>object.pattern(regex, schema)</code></h4>
+<p>Specify validation rules for unknown keys matching a pattern where:</p>
+<ul>
+<li><code>regex</code> - a regular expression tested against the unknown key names.</li>
+<li><code>schema</code> - the schema object matching keys must validate against.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object({
+    a: Joi.string()
+}).pattern(/\w\d/, Joi.boolean());</code></pre>
+<h4 id="objectandpeers"><code>object.and(peers)</code></h4>
+<p>Defines an all-or-nothing relationship between keys where if one of the peers is present, all of them are required as<br />
+well where:</p>
+<ul>
+<li><code>peers</code> - the key names of which if one present, all are required. <code>peers</code> can be a single string value, an<br />
+array of string values, or each peer provided as an argument.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().keys({
+    a: Joi.any(),
+    b: Joi.any()
+}).and('a', 'b');</code></pre>
+<h4 id="objectnandpeers"><code>object.nand(peers)</code></h4>
+<p>Defines a relationship between keys where not all peers can be present at the<br />
+same time where:</p>
+<ul>
+<li><code>peers</code> - the key names of which if one present, the others may not all be present. <code>peers</code> can be a single string value, an<br />
+array of string values, or each peer provided as an argument.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().keys({
+    a: Joi.any(),
+    b: Joi.any()
+}).nand('a', 'b');</code></pre>
+<h4 id="objectorpeers"><code>object.or(peers)</code></h4>
+<p>Defines a relationship between keys where one of the peers is required (and more than one is allowed) where:</p>
+<ul>
+<li><code>peers</code> - the key names of which at least one must appear. <code>peers</code> can be a single string value, an<br />
+array of string values, or each peer provided as an argument.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().keys({
+    a: Joi.any(),
+    b: Joi.any()
+}).or('a', 'b');</code></pre>
+<h4 id="objectxorpeers"><code>object.xor(peers)</code></h4>
+<p>Defines an exclusive relationship between a set of keys where one of them is required but not at the same time where:</p>
+<ul>
+<li><code>peers</code> - the exclusive key names that must not appear together but where one of them is required. <code>peers</code> can be a single string value, an<br />
+array of string values, or each peer provided as an argument.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().keys({
+    a: Joi.any(),
+    b: Joi.any()
+}).xor('a', 'b');</code></pre>
+<h4 id="objectwithkey-peers"><code>object.with(key, peers)</code></h4>
+<p>Requires the presence of other keys whenever the specified key is present where:</p>
+<ul>
+<li><code>key</code> - the reference key.</li>
+<li><code>peers</code> - the required peer key names that must appear together with <code>key</code>. <code>peers</code> can be a single string value or an array of string values.</li>
+</ul>
+<p>Note that unlike <a href="#objectandpeers"><code>object.and()</code></a>, <code>with()</code> creates a dependency only between the <code>key</code> and each of the <code>peers</code>, not<br />
+between the <code>peers</code> themselves.</p>
+<pre><code class="js language-js">const schema = Joi.object().keys({
+    a: Joi.any(),
+    b: Joi.any()
+}).with('a', 'b');</code></pre>
+<h4 id="objectwithoutkey-peers"><code>object.without(key, peers)</code></h4>
+<p>Forbids the presence of other keys whenever the specified is present where:</p>
+<ul>
+<li><code>key</code> - the reference key.</li>
+<li><code>peers</code> - the forbidden peer key names that must not appear together with <code>key</code>. <code>peers</code> can be a single string value or an array of string values.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().keys({
+    a: Joi.any(),
+    b: Joi.any()
+}).without('a', ['b']);</code></pre>
+<h4 id="objectrenamefrom-to-options"><code>object.rename(from, to, [options])</code></h4>
+<p>Renames a key to another name (deletes the renamed key) where:</p>
+<ul>
+<li><code>from</code> - the original key name or a regular expression matching keys.</li>
+<li><code>to</code> - the new key name.</li>
+<li><code>options</code> - an optional object with the following optional keys:<ul>
+<li><code>alias</code> - if <code>true</code>, does not delete the old key name, keeping both the new and old keys in place. Defaults to <code>false</code>.</li>
+<li><code>multiple</code> - if <code>true</code>, allows renaming multiple keys to the same destination where the last rename wins. Defaults to <code>false</code>.</li>
+<li><code>override</code> - if <code>true</code>, allows renaming a key over an existing key. Defaults to <code>false</code>.</li>
+<li><code>ignoreUndefined</code> - if <code>true</code>, skip renaming of a key if it's undefined. Defaults to <code>false</code>.</li></ul></li>
+</ul>
+<p>Keys are renamed before any other validation rules are applied.</p>
+<pre><code class="js language-js">const object = Joi.object().keys({
+    a: Joi.number()
+}).rename('b', 'a');
+
+object.validate({ b: 5 }, (err, value) =&gt; { });</code></pre>
+<p>It can also rename keys using a regular expression:</p>
+<pre><code class="js language-js">const regex = /^foobar$/i;
+
+const schema = Joi.object().keys({
+  fooBar: Joi.string()
+}).rename(regex, 'fooBar');
+
+schema.validate({ FooBar: 'a'}, (err, value) =&gt; {});</code></pre>
+<h4 id="objectassertref-schema-message"><code>object.assert(ref, schema, [message])</code></h4>
+<p>Verifies an assertion where:</p>
+<ul>
+<li><code>ref</code> - the key name or <a href="#refkey-options">reference</a>.</li>
+<li><code>schema</code> - the validation rules required to satisfy the assertion. If the <code>schema</code> includes references, they are resolved against<br />
+the object value, not the value of the <code>ref</code> target.</li>
+<li><code>message</code> - optional human-readable message used when the assertion fails. Defaults to 'failed to pass the assertion test'.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().keys({
+    a: {
+        b: Joi.string(),
+        c: Joi.number()
+    },
+    d: {
+        e: Joi.any()
+    }
+}).assert('d.e', Joi.ref('a.c'), 'equal to a.c');</code></pre>
+<h4 id="objectunknownallow"><code>object.unknown([allow])</code></h4>
+<p>Overrides the handling of unknown keys for the scope of the current object only (does not apply to children) where:</p>
+<ul>
+<li><code>allow</code> - if <code>false</code>, unknown keys are not allowed, otherwise unknown keys are ignored.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object({ a: Joi.any() }).unknown();</code></pre>
+<h4 id="objecttypeconstructor-name"><code>object.type(constructor, [name])</code></h4>
+<p>Requires the object to be an instance of a given constructor where:</p>
+<ul>
+<li><code>constructor</code> - the constructor function that the object must be an instance of.</li>
+<li><code>name</code> - an alternate name to use in validation errors. This is useful when the constructor function does not have a name.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().type(RegExp);</code></pre>
+<h4 id="objectschema"><code>object.schema()</code></h4>
+<p>Requires the object to be a Joi schema instance.</p>
+<pre><code class="js language-js">const schema = Joi.object().schema();</code></pre>
+<h4 id="objectrequiredkeyschildren"><code>object.requiredKeys(children)</code></h4>
+<p>Sets the specified children to required.</p>
+<ul>
+<li><code>children</code> - can be a single string value, an array of string values, or each child provided as an argument.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().keys({ a: { b: Joi.number() }, c: { d: Joi.string() } });
+const requiredSchema = schema.requiredKeys('', 'a.b', 'c', 'c.d');</code></pre>
+<p>Note that in this example <code>''</code> means the current object, <code>a</code> is not required but <code>b</code> is, as well as <code>c</code> and <code>d</code>.</p>
+<h4 id="objectoptionalkeyschildren"><code>object.optionalKeys(children)</code></h4>
+<p>Sets the specified children to optional.</p>
+<ul>
+<li><code>children</code> - can be a single string value, an array of string values, or each child provided as an argument.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().keys({ a: { b: Joi.number().required() }, c: { d: Joi.string().required() } });
+const optionalSchema = schema.optionalKeys('a.b', 'c.d');</code></pre>
+<p>The behavior is exactly the same as <code>requiredKeys</code>.</p>
+<h4 id="objectforbiddenkeyschildren"><code>object.forbiddenKeys(children)</code></h4>
+<p>Sets the specified children to forbidden.</p>
+<ul>
+<li><code>children</code> - can be a single string value, an array of string values, or each child provided as an argument.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.object().keys({ a: { b: Joi.number().required() }, c: { d: Joi.string().required() } });
+const optionalSchema = schema.forbiddenKeys('a.b', 'c.d');</code></pre>
+<p>The behavior is exactly the same as <code>requiredKeys</code>.</p>
+<h3 id="string---inherits-from-any"><code>string</code> - inherits from <code>Any</code></h3>
+<p>Generates a schema object that matches a string data type. Note that empty strings are not allowed by default and must<br />
+be enabled with <code>allow('')</code>. However, if you want to specify a default value in case of empty string you have to use a<br />
+different pattern: <code>Joi.string().empty('').default('default value')</code>. This tells Joi that the empty string should be<br />
+considered as an empty value (instead of invalid) and which value to use as default.</p>
+<p>If the validation <code>convert</code> option is on (enabled by default), a string will be converted using the specified modifiers<br />
+for <code>string.lowercase()</code>, <code>string.uppercase()</code>, <code>string.trim()</code>, and each replacement specified with <code>string.replace()</code>.</p>
+<p>Supports the same methods of the <a href="#any"><code>any()</code></a> type.</p>
+<pre><code class="js language-js">const schema = Joi.string().min(1).max(10);
+schema.validate('12345', (err, value) =&gt; { });</code></pre>
+<h4 id="stringinsensitive"><code>string.insensitive()</code></h4>
+<p>Allows the value to match any whitelist of blacklist item in a case insensitive comparison.</p>
+<pre><code class="js language-js">const schema = Joi.string().valid('a').insensitive();</code></pre>
+<h4 id="stringminlimit-encoding"><code>string.min(limit, [encoding])</code></h4>
+<p>Specifies the minimum number string characters where:</p>
+<ul>
+<li><code>limit</code> - the minimum number of string characters required.</li>
+<li><code>encoding</code> - is specified, the string length is calculated in bytes using the provided encoding.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.string().min(2);</code></pre>
+<p>It can also be a reference to another field.</p>
+<pre><code class="js language-js">const schema = Joi.object({
+  min: Joi.string().required(),
+  value: Joi.string().min(Joi.ref('min'), 'utf8').required()
+});</code></pre>
+<h4 id="stringmaxlimit-encoding"><code>string.max(limit, [encoding])</code></h4>
+<p>Specifies the maximum number of string characters where:</p>
+<ul>
+<li><code>limit</code> - the maximum number of string characters allowed.</li>
+<li><code>encoding</code> - if specified, the string length is calculated in bytes using the provided encoding.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.string().max(10);</code></pre>
+<p>It can also be a reference to another field.</p>
+<pre><code class="js language-js">const schema = Joi.object({
+  max: Joi.string().required(),
+  value: Joi.string().max(Joi.ref('max'), 'utf8').required()
+});</code></pre>
+<h4 id="stringtruncateenabled"><code>string.truncate([enabled])</code></h4>
+<p>Specifies whether the <code>string.max()</code> limit should be used as a truncation.</p>
+<p>Parameters are:</p>
+<ul>
+<li><code>enabled</code> - optional parameter defaulting to <code>true</code> which allows you to reset the behavior of truncate by providing a falsy value.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.string().max(5).truncate();</code></pre>
+<h4 id="stringcreditcard"><code>string.creditCard()</code></h4>
+<p>Requires the number to be a credit card number (Using <a href="http://en.wikipedia.org/wiki/Luhn_algorithm">Lunh
+Algorithm</a>).</p>
+<pre><code class="js language-js">const schema = Joi.string().creditCard();</code></pre>
+<h4 id="stringlengthlimit-encoding"><code>string.length(limit, [encoding])</code></h4>
+<p>Specifies the exact string length required where:</p>
+<ul>
+<li><code>limit</code> - the required string length.</li>
+<li><code>encoding</code> - is specified, the string length is calculated in bytes using the provided encoding.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.string().length(5);</code></pre>
+<p>It can also be a reference to another field.</p>
+<pre><code class="js language-js">const schema = Joi.object({
+  length: Joi.string().required(),
+  value: Joi.string().length(Joi.ref('length'), 'utf8').required()
+});</code></pre>
+<h4 id="stringregexpattern-name--options"><code>string.regex(pattern, [name | options])</code></h4>
+<p>Defines a regular expression rule where:</p>
+<ul>
+<li><code>pattern</code> - a regular expression object the string value must match against.</li>
+<li><code>name</code> - optional name for patterns (useful with multiple patterns).</li>
+<li><code>options</code> - an optional configuration object with the following supported properties:<ul>
+<li><code>name</code> - optional pattern name.</li>
+<li><code>invert</code> - optional boolean flag. Defaults to <code>false</code> behavior. If specified as <code>true</code>, the provided pattern will be disallowed instead of required.</li></ul></li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.string().regex(/^[abc]+$/);
+
+const inlineNamedSchema = Joi.string().regex(/^[0-9]+$/, 'numbers');
+inlineNamedSchema.validate('alpha'); // ValidationError: "value" with value "alpha" fails to match the numbers pattern
+
+const namedSchema = Joi.string().regex(/^[0-9]+$/, { name: 'numbers'});
+namedSchema.validate('alpha'); // ValidationError: "value" with value "alpha" fails to match the numbers pattern
+
+const invertedSchema = Joi.string().regex(/^[a-z]+$/, { invert: true });
+invertedSchema.validate('lowercase'); // ValidationError: "value" with value "lowercase" matches the inverted pattern: [a-z]
+
+const invertedNamedSchema = Joi.string().regex(/^[a-z]+$/, { name: 'alpha', invert: true });
+invertedNamedSchema.validate('lowercase'); // ValidationError: "value" with value "lowercase" matches the inverted alpha pattern</code></pre>
+<h4 id="stringreplacepattern-replacement"><code>string.replace(pattern, replacement)</code></h4>
+<p>Replace characters matching the given <em>pattern</em> with the specified<br />
+<em>replacement</em> string where:</p>
+<ul>
+<li><code>pattern</code> - a regular expression object to match against, or a string of which <em>all</em> occurrences will be replaced.</li>
+<li><code>replacement</code> - the string that will replace the pattern.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.string().replace(/b/gi, 'x');
+schema.validate('abBc', (err, value) =&gt; {
+  // here value will be 'axxc'
+});</code></pre>
+<p>When <code>pattern</code> is a <em>string</em> all its occurrences will be replaced.</p>
+<h4 id="stringalphanum"><code>string.alphanum()</code></h4>
+<p>Requires the string value to only contain a-z, A-Z, and 0-9.</p>
+<pre><code class="js language-js">const schema = Joi.string().alphanum();</code></pre>
+<h4 id="stringtoken"><code>string.token()</code></h4>
+<p>Requires the string value to only contain a-z, A-Z, 0-9, and underscore _.</p>
+<pre><code class="js language-js">const schema = Joi.string().token();</code></pre>
+<h4 id="stringemailoptions"><code>string.email([options])</code></h4>
+<p>Requires the string value to be a valid email address.</p>
+<ul>
+<li><code>options</code> - optional settings:<ul>
+<li><code>errorLevel</code> - Numerical threshold at which an email address is considered invalid.</li>
+<li><code>tldWhitelist</code> - Specifies a list of acceptable TLDs.</li>
+<li><code>minDomainAtoms</code> - Number of atoms required for the domain. Be careful since some domains, such as <code>io</code>, directly allow email.</li></ul></li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.string().email();</code></pre>
+<h4 id="stringipoptions"><code>string.ip([options])</code></h4>
+<p>Requires the string value to be a valid ip address.</p>
+<ul>
+<li><code>options</code> - optional settings:<ul>
+<li><code>version</code> - One or more IP address versions to validate against. Valid values: <code>ipv4</code>, <code>ipv6</code>, <code>ipvfuture</code></li>
+<li><code>cidr</code> - Used to determine if a CIDR is allowed or not. Valid values: <code>optional</code>, <code>required</code>, <code>forbidden</code></li></ul></li>
+</ul>
+<pre><code class="js language-js">// Accept only ipv4 and ipv6 addresses with a CIDR
+const schema = Joi.string().ip({
+  version: [
+    'ipv4',
+    'ipv6'
+  ],
+  cidr: 'required'
+});</code></pre>
+<h4 id="stringurioptions"><code>string.uri([options])</code></h4>
+<p>Requires the string value to be a valid <a href="http://tools.ietf.org/html/rfc3986">RFC 3986</a> URI.</p>
+<ul>
+<li><code>options</code> - optional settings:<ul>
+<li><code>scheme</code> - Specifies one or more acceptable Schemes, should only include the scheme name. Can be an Array or String (strings are automatically escaped for use in a Regular Expression).</li>
+<li><code>allowRelative</code> - Allow relative URIs. Defaults to <code>false</code>.</li>
+<li><code>relativeOnly</code> - Restrict only relative URIs.  Defaults to <code>false</code>.</li></ul></li>
+</ul>
+<pre><code class="js language-js">// Accept git or git http/https
+const schema = Joi.string().uri({
+  scheme: [
+    'git',
+    /git\+https?/
+  ]
+});</code></pre>
+<h4 id="stringguid---aliases-uuid"><code>string.guid()</code> - aliases: <code>uuid</code></h4>
+<p>Requires the string value to be a valid GUID.</p>
+<ul>
+<li><code>options</code> - optional settings:<ul>
+<li><code>version</code> - Specifies one or more acceptable versions. Can be an Array or String with the following values:<br />
+<code>uuidv1</code>, <code>uuidv2</code>, <code>uuidv3</code>, <code>uuidv4</code>, or <code>uuidv5</code>. If no <code>version</code> is specified then it is assumed to be a generic <code>guid</code>.</li></ul></li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.string().guid({
+    version: [
+        'uuidv4',
+        'uuidv5'
+    ]
+});</code></pre>
+<h4 id="stringhex"><code>string.hex()</code></h4>
+<p>Requires the string value to be a valid hexadecimal string.</p>
+<pre><code class="js language-js">const schema = Joi.string().hex();</code></pre>
+<h4 id="stringbase64options"><code>string.base64([options])</code></h4>
+<p>Requires the string value to be a valid base64 string; does not check the decoded value.</p>
+<ul>
+<li><code>options</code> - optional settings:<ul>
+<li><code>paddingRequired</code> - optional parameter defaulting to <code>true</code> which will require <code>=</code> padding if <code>true</code> or make padding optional if <code>false</code>.</li></ul></li>
+</ul>
+<p>Padding characters are not required for decoding, as the number of missing bytes can be inferred from the number of digits. With that said, try to use padding if at all possible.</p>
+<pre><code class="js language-js">const schema = Joi.string().base64();
+schema.validate('VE9PTUFOWVNFQ1JFVFM'); // ValidationError: "value" must be a valid base64 string
+schema.validate('VE9PTUFOWVNFQ1JFVFM='); // No Error
+
+const paddingRequiredSchema = Joi.string().base64({ paddingRequired: true });
+paddingRequiredSchema.validate('VE9PTUFOWVNFQ1JFVFM'); // ValidationError: "value" must be a valid base64 string
+paddingRequiredSchema.validate('VE9PTUFOWVNFQ1JFVFM='); // No Error
+
+const paddingOptionalSchema = Joi.string().base64({ paddingRequired: false });
+paddingOptionalSchema.validate('VE9PTUFOWVNFQ1JFVFM'); // No Error
+paddingOptionalSchema.validate('VE9PTUFOWVNFQ1JFVFM='); // No Error</code></pre>
+<h4 id="stringhostname"><code>string.hostname()</code></h4>
+<p>Requires the string value to be a valid hostname as per <a href="http://tools.ietf.org/html/rfc1123">RFC1123</a>.</p>
+<pre><code class="js language-js">const schema = Joi.string().hostname();</code></pre>
+<h4 id="stringnormalizeform"><code>string.normalize([form])</code></h4>
+<p>Requires the string value to be in a <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String/normalize">unicode normalized</a><br />
+form. If the validation <code>convert</code> option is on (enabled by default), the string will be normalized.</p>
+<ul>
+<li><code>form</code> - The unicode normalization form to use. Valid values: <code>NFC</code> [default], <code>NFD</code>, <code>NFKC</code>, <code>NFKD</code></li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.string().normalize(); // defaults to NFC
+const schema = Joi.string().normalize('NFC'); // canonical composition
+const schema = Joi.string().normalize('NFD'); // canonical decomposition
+const schema = Joi.string().normalize('NFKC'); // compatibility composition
+const schema = Joi.string().normalize('NFKD'); // compatibility decomposition</code></pre>
+<h4 id="stringlowercase"><code>string.lowercase()</code></h4>
+<p>Requires the string value to be all lowercase. If the validation <code>convert</code> option is on (enabled by default), the string<br />
+will be forced to lowercase.</p>
+<pre><code class="js language-js">const schema = Joi.string().lowercase();</code></pre>
+<h4 id="stringuppercase"><code>string.uppercase()</code></h4>
+<p>Requires the string value to be all uppercase. If the validation <code>convert</code> option is on (enabled by default), the string<br />
+will be forced to uppercase.</p>
+<pre><code class="js language-js">const schema = Joi.string().uppercase();</code></pre>
+<h4 id="stringtrim"><code>string.trim()</code></h4>
+<p>Requires the string value to contain no whitespace before or after. If the validation <code>convert</code> option is on (enabled by<br />
+default), the string will be trimmed.</p>
+<pre><code class="js language-js">const schema = Joi.string().trim();</code></pre>
+<h4 id="stringisodate"><code>string.isoDate()</code></h4>
+<p>Requires the string value to be in valid ISO 8601 date format.<br />
+If the validation <code>convert</code> option is on (enabled by default), the string will be forced to simplified extended ISO format (ISO 8601). Be aware that this operation uses javascript Date object, which does not support the full ISO format, so a few formats might not pass when using <code>convert</code>.</p>
+<pre><code class="js language-js">const schema = Joi.string().isoDate();</code></pre>
+<h3 id="alternatives---inherits-from-any"><code>alternatives</code> - inherits from <code>Any</code></h3>
+<p>Generates a type that will match one of the provided alternative schemas via the <a href="#alternativestryschemas"><code>try()</code></a><br />
+method. If no schemas are added, the type will not match any value except for <code>undefined</code>.</p>
+<p>Supports the same methods of the <a href="#any"><code>any()</code></a> type.</p>
+<p>Alternatives can be expressed using the shorter <code>[]</code> notation.</p>
+<pre><code class="js language-js">const alt = Joi.alternatives().try(Joi.number(), Joi.string());
+// Same as [Joi.number(), Joi.string()]</code></pre>
+<h4 id="alternativestryschemas"><code>alternatives.try(schemas)</code></h4>
+<p>Adds an alternative schema type for attempting to match against the validated value where:</p>
+<ul>
+<li><code>schema</code> - an array of alternative <strong>joi</strong> types. Also supports providing each type as a separate argument.</li>
+</ul>
+<pre><code class="js language-js">const alt = Joi.alternatives().try(Joi.number(), Joi.string());
+alt.validate('a', (err, value) =&gt; { });</code></pre>
+<h4 id="alternativeswhencondition-options"><code>alternatives.when(condition, options)</code></h4>
+<p>Adds a conditional alternative schema type, either based on another key (not the same as <code>any.when()</code>) value, or a<br />
+schema peeking into the current value, where:</p>
+<ul>
+<li><code>condition</code> - the key name or <a href="#refkey-options">reference</a>, or a schema.</li>
+<li><code>options</code> - an object with:<ul>
+<li><code>is</code> - the required condition <strong>joi</strong> type. Forbidden when <code>condition</code> is a schema.</li>
+<li><code>then</code> - the alternative schema type to <strong>try</strong> if the condition is true. Required if <code>otherwise</code> is missing.</li>
+<li><code>otherwise</code> - the alternative schema type to <strong>try</strong> if the condition is false. Required if <code>then</code> is missing.</li></ul></li>
+</ul>
+<pre><code class="js language-js">const schema = {
+    a: Joi.alternatives().when('b', { is: 5, then: Joi.string(), otherwise: Joi.number() }),
+    b: Joi.any()
+};</code></pre>
+<pre><code class="js language-js">const schema = Joi.alternatives().when(Joi.object({ b: 5 }).unknown(), {
+    then: Joi.object({
+        a: Joi.string(),
+        b: Joi.any()
+    }),
+    otherwise: Joi.object({
+        a: Joi.number(),
+        b: Joi.any()
+    })
+});</code></pre>
+<p>Note that <code>when()</code> only adds additional alternatives to try and does not impact the overall type. Setting<br />
+a <code>required()</code> rule on a single alternative will not apply to the overall key. For example,<br />
+this definition of <code>a</code>:</p>
+<pre><code class="js language-js">const schema = {
+    a: Joi.alternatives().when('b', { is: true, then: Joi.required() }),
+    b: Joi.boolean()
+};</code></pre>
+<p>Does not turn <code>a</code> into a required key when <code>b</code> is <code>true</code>. Instead, it tells the validator to try and match the<br />
+value to anything that's not <code>undefined</code>. However, since <code>Joi.alternatives()</code> by itself allows <code>undefined</code>, the rule<br />
+does not accomplish turning <code>a</code> to a required value. This rule is the same as <code>Joi.alternatives([Joi.required()])</code><br />
+when <code>b</code> is <code>true</code> which will allow any value including <code>undefined</code>.</p>
+<p>To accomplish the desired result above use:</p>
+<pre><code class="js language-js">const schema = {
+    a: Joi.when('b', { is: true, then: Joi.required() }),
+    b: Joi.boolean()
+};</code></pre>
+<h3 id="lazyfn---inherits-from-any"><code>lazy(fn)</code> - inherits from <code>Any</code></h3>
+<p>Generates a placeholder schema for a schema that you would provide with the <code>fn</code>.</p>
+<p>Supports the same methods of the <a href="#any"><code>any()</code></a> type.</p>
+<p>This is mostly useful for recursive schemas, like :</p>
+<pre><code class="js language-js">const Person = Joi.object({
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+    children: Joi.array().items(Joi.lazy(() =&gt; Person).description('Person schema'))
+});</code></pre>
+<h2 id="errors">Errors</h2>
+<p>Joi throws classical javascript <code>Error</code>s containing :</p>
+<ul>
+<li><code>name</code> - <code>'ValidationError'</code>.</li>
+<li><code>isJoi</code> - <code>true</code>.</li>
+<li><code>details</code> - an array of errors :<ul>
+<li><code>message</code> - string with a description of the error.</li>
+<li><code>path</code> - ordered array where each element is the accessor to the value where the error happened.</li>
+<li><code>type</code> - type of the error.</li>
+<li><code>context</code> - object providing context of the error containing at least:<ul>
+<li><code>key</code> - key of the value that errored, equivalent to the last element of <code>details.path</code>.</li>
+<li><code>label</code> - label of the value that errored, or the <code>key</code> if any, or the default <code>language.root</code>.</li></ul></li></ul></li>
+<li><code>annotate</code> - function that returns a string with an annotated version of the object pointing at the places where errors occurred. Takes an optional parameter that, if truthy, will strip the colors out of the output.</li>
+<li><code>_object</code> - the original object to validate.</li>
+</ul>
+    </article>
+</body>
+</html>
+  

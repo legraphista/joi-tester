@@ -9,6 +9,7 @@ For extra information on the error, you can hover over the red dot.
 ___
 
 ## Road-map
+ - ~~Add in-site Joi documentation~~
  - Add support for multiple versions of joi
  - Add support for linting the JS
  - Better `ValidationError` to `JSON` test mapping

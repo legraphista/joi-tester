@@ -102,27 +102,30 @@ display.writeError = (code, { error, value, parseErrorSchema, parseErrorJson }) 
     if (error) {
 
       error.details.forEach(({ path, type, message, context }) => {
+        try {
+          const { start, end } = walkCodeAndGetStartEnd(code, path);
 
-        const { start, end } = walkCodeAndGetStartEnd(code, path);
+          const textMarker = jsonEditor.markText(start, end, {
+            className: 'error-code',
+            inclusiveRight: true,
+            inclusiveLeft: true
+          });
+          jsonEditorMarkers.push(textMarker);
 
-        const textMarker = jsonEditor.markText(start, end, {
-          className: 'error-code',
-          inclusiveRight: true,
-          inclusiveLeft: true
-        });
-        jsonEditorMarkers.push(textMarker);
+          const domWidget = document.createElement('div');
+          domWidget.classList.add('code-widget');
+          jsonEditorDomWidgets.push(domWidget);
 
-        const domWidget = document.createElement('div');
-        domWidget.classList.add('code-widget');
-        jsonEditorDomWidgets.push(domWidget);
-
-        domWidget.innerHTML = `\
+          domWidget.innerHTML = `\
 <span>Type</span>: ${type}
 <span>Path</span>: ${path.join('.')}
 <span>Message</span>: ${message}
 <span>Context</span>: ${JSON.stringify(context, null, 2)}\
 `;
-        jsonEditor.addWidget(start, domWidget);
+          jsonEditor.addWidget(start, domWidget);
+        } catch (err) {
+          console.error('chould not display error for', err, path, type, message, context);
+        }
       })
 
     }

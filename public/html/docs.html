@@ -24,7 +24,7 @@
 <body>
     <article class="markdown-body">
         <!-- version -->
-<h1 id="1301-api-reference">13.0.1 API Reference</h1>
+<h1 id="1302-api-reference">13.0.2 API Reference</h1>
 <!-- versionstop -->
 <p><img src="https://raw.github.com/hapijs/joi/master/images/validation.png" align="right" /></p>
 <!-- toc -->
@@ -181,7 +181,7 @@
 <li><code>objects</code> - set to <code>true</code> to remove unknown keys from objects.</li></ul></li>
 <li><code>language</code> - overrides individual error messages. Defaults to no override (<code>{}</code>). Messages apply the following rules :</li>
 <li>variables are put between curly braces like <code>{{var}}</code>, if prefixed by a <code>!</code> like <code>{{!var}}</code>, it will be html escaped if the option <code>escapeHtml</code> is also set to <code>true</code></li>
-<li>strings are always preceeded by the key name, unless a <code>{{key}}</code> is found elsewhere or if the string is prefixed by a <code>!!</code></li>
+<li>strings are always preceeded by the key name, unless a <code>{{label}}</code> is found elsewhere or if the string is prefixed by a <code>!!</code></li>
 <li>when <code>'label'</code> is set, it overrides the key name in the error message</li>
 <li>to better understand the structure of the language, it's advised to have a look at the existing messages you want to override <a href="lib/language.js">here</a></li>
 <li><code>presence</code> - sets the default presence requirements. Supported modes: <code>'optional'</code>, <code>'required'</code>, and <code>'forbidden'</code>.<br />

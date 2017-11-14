@@ -16,7 +16,9 @@ module.exports = (schemaText, jsonText) => {
 
   let json, parseErrorJson;
   try {
-    json = eval(`(${jsonText})`);
+    if(jsonText.trim()){
+      json = eval(`(${jsonText})`);
+    }
   } catch (err) {
     parseErrorJson = err;
   }

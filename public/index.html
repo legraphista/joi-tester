@@ -17,28 +17,39 @@
 
         <div class="code-area">
         <textarea id="joi">
-//https://github.com/hapijs/joi
-//Insert here your Joi schema
-Joi.object().keys({
-  username: Joi.string().alphanum().min(3).max(30).required(),
-  password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-  access_token: [Joi.string(), Joi.number()],
-  birthyear: Joi.number().integer().min(1900).max(2017),
-  email: Joi.string().email()
-}).with('username', 'birthyear').without('password', 'access_token')
+// You can address joi via 'joi' or 'Joi'
+// Only the last schema will be used
+
+const number = joi.number().default(10);
+const string = joi.string().default('i\'m a string');
+const object = joi.object({number, string})
+const array  = joi.array().items(object.default());
+
+// this will not be used
+joi.number().valid(123);
+
+// this will be used
+joi.object({
+  id: joi.string().guid().required(),
+  data: array.required()
+});
         </textarea>
         </div>
 
         <div class="code-area">
         <textarea id="json">
-//Insert here the object to validate
+// Validate your properties here
 {
-    username: 'abc',
-    birthyear: 1991,
-    shoudlNotExist: true,
-    access_token: 'access_token',
-    password: 'password',
-    someBigArray : [{a: 1}, {b: 2}, {c: 3}, {d: 4}, {e: 5}, {f: 6}, {g: 7}, {h: 8}]
+  id: '8511be72-c985-11e7-b1fd-6c4008b2cf1c',
+  data: [
+    {},
+    {number: 1},
+    {string: 'hello!'},
+    {number: 3, string: 'I\'m doing a very bad job at keeping is short, don\'t you agree?'}
+  ],
+
+  // you can hover over the bubble for more info
+  'I should not be here': true
 }
         </textarea>
         </div>

@@ -24,7 +24,7 @@
 <body>
     <article class="markdown-body">
         <!-- version -->
-<h1 id="1302-api-reference">13.0.2 API Reference</h1>
+<h1 id="1320-api-reference">13.2.0 API Reference</h1>
 <!-- versionstop -->
 <p><img src="https://raw.github.com/hapijs/joi/master/images/validation.png" align="right" /></p>
 <!-- toc -->
@@ -33,6 +33,7 @@
 <li><a href="#version"><code>version</code></a></li>
 <li><a href="#validatevalue-schema-options-callback"><code>validate(value, schema, [options], [callback])</code></a></li>
 <li><a href="#compileschema"><code>compile(schema)</code></a></li>
+<li><a href="#describeschema"><code>describe(schema)</code></a></li>
 <li><a href="#assertvalue-schema-message"><code>assert(value, schema, [message])</code></a></li>
 <li><a href="#attemptvalue-schema-message"><code>attempt(value, schema, [message])</code></a></li>
 <li><a href="#refkey-options"><code>ref(key, [options])</code></a></li>
@@ -69,6 +70,7 @@
 <li><a href="#anyrawisraw"><code>any.raw(isRaw)</code></a></li>
 <li><a href="#anyemptyschema"><code>any.empty(schema)</code></a></li>
 <li><a href="#anyerrorerr"><code>any.error(err)</code></a></li>
+<li><a href="#anydescribe"><code>any.describe()</code></a></li>
 <li><a href="#array---inherits-from-any"><code>array</code> - inherits from <code>Any</code></a></li>
 <li><a href="#arraysparseenabled"><code>array.sparse([enabled])</code></a></li>
 <li><a href="#arraysingleenabled"><code>array.single([enabled])</code></a></li>
@@ -108,11 +110,13 @@
 <li><a href="#numbermultiplebase"><code>number.multiple(base)</code></a></li>
 <li><a href="#numberpositive"><code>number.positive()</code></a></li>
 <li><a href="#numbernegative"><code>number.negative()</code></a></li>
+<li><a href="#numberport"><code>number.port()</code></a></li>
 <li><a href="#object---inherits-from-any"><code>object</code> - inherits from <code>Any</code></a></li>
 <li><a href="#objectkeysschema"><code>object.keys([schema])</code></a><ul>
 <li><a href="#-notation"><code>{} notation</code></a></li>
 <li><a href="#joiobjectschema-notation"><code>Joi.object([schema]) notation</code></a></li>
 <li><a href="#joiobjectkeysschema-notation"><code>Joi.object().keys([schema]) notation</code></a></li></ul></li>
+<li><a href="#objectappendschema"><code>object.append([schema])</code></a></li>
 <li><a href="#objectminlimit"><code>object.min(limit)</code></a></li>
 <li><a href="#objectmaxlimit"><code>object.max(limit)</code></a></li>
 <li><a href="#objectlengthlimit"><code>object.length(limit)</code></a></li>
@@ -240,6 +244,18 @@ const schema = Joi.alternatives().try([
         ])
     })
 ]);</code></pre>
+<h3 id="describeschema"><code>describe(schema)</code></h3>
+<p>Returns an object that represents the internal configuration of a <strong>joi</strong> schema. Useful for debugging and exposing a schema's configuration to other systems, like valid values in a user interface.</p>
+<ul>
+<li><code>schema</code> - the schema to describe.</li>
+</ul>
+<pre><code class="js language-js">const schema = Joi.any().valid([ 'foo', 'bar' ]);
+
+console.log(Joi.describe(schema));</code></pre>
+<p>Results in:</p>
+<pre><code>{ type: 'any',
+  flags: { allowOnly: true },
+  valids: [ 'foo', 'bar' ] }</code></pre>
 <h3 id="assertvalue-schema-message"><code>assert(value, schema, [message])</code></h3>
 <p>Validates a value against a schema and <a href="#errors">throws</a> if validation fails where:</p>
 <ul>
@@ -287,9 +303,12 @@ It's especially useful if you want to post-process error messages.</p>
 <pre><code class="js language-js">const ref = Joi.ref('a');
 Joi.isRef(ref); // returns true</code></pre>
 <h3 id="reachschema-path"><code>reach(schema, path)</code></h3>
-<p>Get a sub-schema of an existing schema based on a path. Path separator is a dot (<code>.</code>).</p>
+<p>Get a sub-schema of an existing schema based on a <code>path</code> that can be either a string or an array of strings For string values path separator is a dot (<code>.</code>).</p>
 <pre><code class="js language-js">const schema = Joi.object({ foo: Joi.object({ bar: Joi.number() }) });
-const number = Joi.reach(schema, 'foo.bar');</code></pre>
+const number = Joi.reach(schema, 'foo.bar');
+
+//or
+const result = Joi.reach(schema, ['foo', 'bar']); //same as number</code></pre>
 <h3 id="defaultsfn"><code>defaults(fn)</code></h3>
 <p>Creates a new Joi instance that will apply defaults onto newly created schemas through the use of the <code>fn</code> function that takes exactly one argument, the schema being created.</p>
 <p>The function must always return a schema, even if untransformed.</p>
@@ -613,7 +632,7 @@ For example, use <code>is: Joi.number().required()</code> to guarantee that a jo
     }),
     otherwise: Joi.object({
         a: Joi.valid('z')
-    }) 
+    })
 });</code></pre>
 <p>Note that this style is much more useful when your whole schema depends on the value of one of its property, or if you find yourself repeating the check for many keys of an object.</p>
 <p>Alternatively, if you want to specify a specific type such as <code>string</code>, <code>array</code>, etc, you can do so like this:</p>
@@ -720,6 +739,15 @@ let schema = Joi.object({
 schema.validate({ foo: -2 });    // returns error.message === 'child "foo" fails because ["foo" contains 1 errors, here is the list : [number.min]]'</code></pre>
 <p>Note that if you want to intercept errors on nested structures such as objects and arrays, you will also get a nested structure to explore the children errors, going one level down through the <code>err.context.reason</code> property.</p>
 <p>If you want a full substitution of the error system, you can hook at the root and render that <code>errors</code> array with whatever templating system you want, just be aware that you will have to crawl the nested errors for the information you want to actually show.</p>
+<h4 id="anydescribe"><code>any.describe()</code></h4>
+<p>Behaves the same as <a href="#describeschema"><code>describe(schema)</code></a> and returns an object that represents the internal configuration of the <strong>joi</strong> schema.</p>
+<pre><code class="js language-js">const schema = Joi.any().valid([ 'foo', 'bar' ]);
+
+console.log(schema.describe());</code></pre>
+<p>Results in:</p>
+<pre><code>{ type: 'any',
+  flags: { allowOnly: true },
+  valids: [ 'foo', 'bar' ] }</code></pre>
 <h3 id="array---inherits-from-any"><code>array</code> - inherits from <code>Any</code></h3>
 <p>Generates a schema object that matches an array data type. Note that undefined values inside arrays are not allowed by<br />
 default but can be by using <code>sparse()</code>. If the validation <code>convert</code> option is on (enabled by default), a string will be<br />
@@ -735,6 +763,7 @@ schema = schema.sparse(false); // undefined values are now denied</code></pre>
 <h4 id="arraysingleenabled"><code>array.single([enabled])</code></h4>
 <p>Allows single values to be checked against rules as if it were provided as an array.</p>
 <p><code>enabled</code> can be used with a falsy value to go back to the default behavior.</p>
+<p>Note: <code>convert</code> option must be enabled.</p>
 <pre><code class="js language-js">const schema = Joi.array().items(Joi.number()).single();
 schema.validate([4]); // returns `{ error: null, value: [ 4 ] }`
 schema.validate(4); // returns `{ error: null, value: [ 4 ] }`</code></pre>
@@ -999,6 +1028,9 @@ Therefore, it has the normal limitations of Javascript modulo operator. The resu
 <h4 id="numbernegative"><code>number.negative()</code></h4>
 <p>Requires the number to be negative.</p>
 <pre><code class="js language-js">const schema = Joi.number().negative();</code></pre>
+<h4 id="numberport"><code>number.port()</code></h4>
+<p>Requires the number to be a TCP port, so between 0 and 65535.</p>
+<pre><code class="js language-js">const schema = Joi.number().port();</code></pre>
 <h3 id="object---inherits-from-any"><code>object</code> - inherits from <code>Any</code></h3>
 <p>Generates a schema object that matches an object data type (as well as JSON strings that parsed into objects). Defaults<br />
 to allowing any child key. If the validation <code>convert</code> option is on (enabled by default), a string will be converted to<br />
@@ -1071,6 +1103,19 @@ schema.validate(true, (err, value) =&gt; {
 <h5 id="joiobjectkeysschema-notation"><code>Joi.object().keys([schema]) notation</code></h5>
 <p>This is basically the same as <code>Joi.object([schema])</code>, but using <code>Joi.object().keys([schema])</code> is more useful when you want to add more keys (e.g. call <code>keys()</code> multiple times). If you are only adding one set of keys, you can skip the <code>keys()</code> method and just use <code>object()</code> directly.</p>
 <p>Some people like to use <code>keys()</code> to make the code more explicit (this is style only).</p>
+<h4 id="objectappendschema"><code>object.append([schema])</code></h4>
+<p>Appends the allowed object keys where:</p>
+<ul>
+<li><code>schema</code> - optional object where each key is assigned a <strong>joi</strong> type object. If <code>schema</code> is <code>null</code>,<code>undefined</code> or <code>{}</code> no changes will be applied. Uses object.keys([schema]) to append keys.</li>
+</ul>
+<pre><code class="js language-js">// Validate key a
+const base = Joi.object().keys({
+    a: Joi.number()
+});
+// Validate keys a, b.
+const extended = base.append({
+    b: Joi.string()
+});</code></pre>
 <h4 id="objectminlimit"><code>object.min(limit)</code></h4>
 <p>Specifies the minimum number of keys in the object where:</p>
 <ul>
@@ -1261,7 +1306,7 @@ schema.validate('12345', (err, value) =&gt; { });</code></pre>
 <p>Specifies the minimum number string characters where:</p>
 <ul>
 <li><code>limit</code> - the minimum number of string characters required.</li>
-<li><code>encoding</code> - is specified, the string length is calculated in bytes using the provided encoding.</li>
+<li><code>encoding</code> - if specified, the string length is calculated in bytes using the provided encoding.</li>
 </ul>
 <pre><code class="js language-js">const schema = Joi.string().min(2);</code></pre>
 <p>It can also be a reference to another field.</p>
@@ -1289,14 +1334,14 @@ schema.validate('12345', (err, value) =&gt; { });</code></pre>
 </ul>
 <pre><code class="js language-js">const schema = Joi.string().max(5).truncate();</code></pre>
 <h4 id="stringcreditcard"><code>string.creditCard()</code></h4>
-<p>Requires the number to be a credit card number (Using <a href="http://en.wikipedia.org/wiki/Luhn_algorithm">Lunh
+<p>Requires the number to be a credit card number (Using <a href="http://en.wikipedia.org/wiki/Luhn_algorithm">Luhn
 Algorithm</a>).</p>
 <pre><code class="js language-js">const schema = Joi.string().creditCard();</code></pre>
 <h4 id="stringlengthlimit-encoding"><code>string.length(limit, [encoding])</code></h4>
 <p>Specifies the exact string length required where:</p>
 <ul>
 <li><code>limit</code> - the required string length.</li>
-<li><code>encoding</code> - is specified, the string length is calculated in bytes using the provided encoding.</li>
+<li><code>encoding</code> - if specified, the string length is calculated in bytes using the provided encoding.</li>
 </ul>
 <pre><code class="js language-js">const schema = Joi.string().length(5);</code></pre>
 <p>It can also be a reference to another field.</p>

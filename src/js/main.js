@@ -9,11 +9,11 @@ const display = require('./displaPanel');
 let schemaText = document.getElementById('joi').value;
 let jsonText = document.getElementById('json').value;
 
-editors[ 'joi' ].on('change', (e) => {
+editors['joi'].on('change', (e) => {
   schemaText = e.getValue();
   runTest();
 });
-editors[ 'json' ].on('change', (e) => {
+editors['json'].on('change', (e) => {
   jsonText = e.getValue();
   runTest();
 });
@@ -30,3 +30,5 @@ const runTest = () => {
   }
 };
 runTest();
+
+console.log(`Serving Joi@${require('joi/package').version}`);

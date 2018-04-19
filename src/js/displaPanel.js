@@ -5,7 +5,7 @@
 const editors = require('./editors');
 const display = module.exports = {};
 const stringify = require("json-stringify-pretty-compact");
-const statusDom = document.getElementsByClassName('status')[ 0 ];
+const statusDom = document.getElementsByClassName('status')[0];
 const jsonEditorMarkers = [];
 const jsonEditorDomWidgets = [];
 const { json: jsonEditor, output: outputEditor } = editors;
@@ -35,7 +35,7 @@ const walkCodeAndGetStartEnd = (code, path) => {
     let index = Math.max(0, reg.index - 1) + codeIndex;
 
     find = code.substr(index);
-    let blockStart = find.indexOf(reg[ 3 ]);
+    let blockStart = find.indexOf(reg[3]);
     const start = index;
     index += Math.max(0, blockStart - 1);
 
@@ -57,12 +57,12 @@ const walkCodeAndGetStartEnd = (code, path) => {
         deep--;
       }
 
-      if (!~[ ' ', '\n', '\t' ].indexOf(c) && deep >= 0) {
+      if (!~[' ', '\n', '\t'].indexOf(c) && deep >= 0) {
         lastMeaningfulIndex = index;
       }
     }
     index--;
-    if (!~[ ' ', '\n', '\t' ].indexOf(code.charAt(index)) && deep >= 0) {
+    if (!~[' ', '\n', '\t'].indexOf(code.charAt(index)) && deep >= 0) {
       lastMeaningfulIndex = index;
     }
 

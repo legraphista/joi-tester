@@ -17,7 +17,7 @@ const factory = (textArea) => {
     autoCloseBrackets: true,
     tabSize: 2,
     mode: 'javascript',
-    gutters: [ "CodeMirror-lint-markers" ],
+    gutters: ["CodeMirror-lint-markers"],
     lint: true
   });
   editor.setOption("theme", 'cobalt');
@@ -27,11 +27,11 @@ const factory = (textArea) => {
 
 
 const editors = window.editors = {};
-[ 'joi', 'json', 'output' ].forEach(id => {
+['joi', 'json', 'output'].forEach(id => {
 
   const area = document.getElementById(id);
 
-  editors[ id ] = factory(area);
+  editors[id] = factory(area);
 });
 
 module.exports = editors;

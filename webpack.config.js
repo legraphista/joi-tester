@@ -10,13 +10,40 @@ const extractGithubCss = new ExtractTextPlugin({
   filename: "gh.css"
 });
 
-const isProd = process.env.PROD = 1 || process.argv.some(x => /^(--)?p(rod(uction)?)?$/);
+const isProd = (
+  parseInt(process.env.PROD) === 1 ||
+  process.argv.some(x => /^(--)?p(rod(uction)?)?$/.test(x)) ||
+  /^(--)?p(rod(uction)?)?$/.test(process.env.NODE_ENV)
+);
 isProd && console.log('Compiling for production');
 
-if(isProd){
-  console.log('Convertind docs')
+if (isProd) {
+  console.log('Converting docs');
   require('child_process').execSync('node convert-docs.js');
 }
+
+const babelLoaderUseOptions = [{
+  loader: 'babel-loader',
+  options: {
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          modules: false,
+          browsers: ["last 2 versions"]
+        }
+      ],
+    ],
+    plugins: [
+      ["@babel/transform-runtime", {
+        "helpers": false,
+        "polyfill": true,
+        "regenerator": true,
+        "moduleName": "@babel/runtime"
+      }]
+    ]
+  }
+}];
 
 module.exports = {
   entry: [
@@ -40,29 +67,13 @@ module.exports = {
   module: {
     rules: [
       {
-        use: [ {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              [
-                '@babel/preset-env',
-                {
-                  modules: false,
-                  browsers: [ "last 2 versions" ]
-                }
-              ],
-            ],
-            plugins: [
-              [ "@babel/transform-runtime", {
-                "helpers": false,
-                "polyfill": true,
-                "regenerator": true,
-                "moduleName": "@babel/runtime"
-              } ]
-            ]
-          }
-        } ],
+        // need to babelify joi, isemail, hoek, and topo's lib
+        test: /[\\\/]node_modules[\\\/](joi[\\\/]lib[\\\/]|isemail[\\\/]lib[\\\/]|hoek[\\\/]lib[\\\/]|topo[\\\/]lib[\\\/])/,
+        use: babelLoaderUseOptions
+      },
+      {
         test: /\.jsx?$/,
+        use: babelLoaderUseOptions,
 
         exclude: [
           path.resolve(__dirname, 'node_modules')
@@ -96,7 +107,7 @@ module.exports = {
                 plugins: loader => [
                   postcssImport({ addDependencyTo: webpack }),
                   require('postcss-import')({ root: loader.resourcePath }),
-                  require('autoprefixer')({ browsers: [ 'last 2 versions' ] }),
+                  require('autoprefixer')({ browsers: ['last 2 versions'] }),
                   require('cssnano')()
                 ],
                 sourceMap: !isProd
@@ -108,12 +119,11 @@ module.exports = {
       }
     ]
   },
-  resolve: {
-    // you can now require('file') instead of require('file.coffee')
-    extensions: [ '.js', '.jsx' ],
-    enforceExtension: false,
-    alias: {
-      joi: 'joi-browser'
-    }
+  node: {
+    global: true,
+    Buffer: true,
+    crypto: 'empty',
+    net: 'empty',
+    dns: 'empty'
   }
 };

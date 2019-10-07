@@ -2,7 +2,7 @@
 /**
  (test:File)<-[:MADE {on: 11/11/2017}]-(Stefan:Coder)
  */
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 const joi = Joi;
 
 module.exports = (schemaText, jsonText) => {

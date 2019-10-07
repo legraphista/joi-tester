@@ -15,7 +15,11 @@ converter.setFlavor('github');
 
 (async () => {
 
+  // 16.1.0 docs
+  // const md = await fetch('https://raw.githubusercontent.com/hapijs/joi/7164e00a338b9b8ec4493e5446987d821c74f5d6/API.md').then(x => x.text());
   const md = await fetch('https://raw.githubusercontent.com/hapijs/joi/master/API.md').then(x => x.text());
+
+  // const md = await fetch('https://raw.githubusercontent.com/legraphista/joi/master/API.md').then(x => x.text());
 
   const html = `
 <!DOCTYPE html>

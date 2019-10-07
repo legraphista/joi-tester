@@ -31,4 +31,4 @@ const runTest = () => {
 };
 runTest();
 
-console.log(`Serving Joi@${require('joi/package').version}`);
+console.log(`Serving Joi@${require('@hapi/joi/package').version}`);
